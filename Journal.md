@@ -1,5 +1,17 @@
 # Project journal
 
+## FULL LAN DATA READY — 2026-11-09
+
+Pinned-source LAN preparation v1 completed at satyapaladugu/sdn-ddos-lan-preparation. All1,125,059rows persisted and verified by local Parquet FOOTER metadata (no local analytical processing);94/94manifest members match. Retained DDoS counts train4196/development999/test1632. Quarantined overlap observations remain in the product with their reason and family, rather than being silently deleted. Saved output319,250,260bytes before the extra native log/retrieval metadata; clean Parquet311,941,276bytes in32files. Verified local copy is under experiments/public_dataset_la/runs/lan-preparation-kaggle-20261109-v1/retrieved/. Available local capacity permitted this~319MBcopy. Six source-stage entries complete. Dataset layout publication remains separately verified, not inferred from notebook completion.
+
+Updated modular prefix preflight v2 also completed,98/98artifact hashes match, Parquet footers confirm5000ToN/5000BoT/25000LANrows. Generated software-fixture model preflight completed12/12 fit/save/reload/score paths on Kaggle; no DDoS accuracy claim. Model wall times include startup and saved outputs: Spark families~30–49s each on400fixture training rows; Python challengers~2–6s. Full source ToN and BoT preparation v1 submitted independently, same pinned source27fa7ef0162a4810dfba1579f951ffa6cda26ff3. These jobs do not depend on unfinished model presentation edits.
+
+Operational retrieval discovered Windows default-codepage failure in Kaggle CLI native-log writing. Preserved error logs, then retrieved through the same official SDK with UTF8 writes and bounded parallel downloads; no remote run was restarted. Explicit SDK version labels returned404; latest-session retrieval is therefore checked against the expected pinned Git revision and protected by not updating a notebook until retrieval finishes. Signed file URLs/credentials are not persisted.
+
+Source now includes strict score alignment, prediction/memory diagnostics, source-specific FPR threshold guards, and artifact-based LA views. Increased proposed development cohort from30k to300k because BoT has only51,989benign observations in16.9Mtotal; a30kcohort divided three ways is inadequate for source-specific benign-FPR estimation. Exact observed counts still gate threshold fitting. Numeric transformations remain fitted inside training folds. LAN classifier pilot may run on20kmatched training observations while the two larger sources prepare; final comparison budgets remain separately reviewed and resource-pilot models cannot open final tests.
+
+---
+
 ## EXECUTION UPDATE — verified modular Kaggle prefix preflight
 
 Actual stable identity: https://www.kaggle.com/code/satyapaladugu/sdn-ddos-modular-prefix-preflight , version1, pinned commit9214fee8e09c6414df63b9e659cdb592622459e4. Completed and retrieved;94/94 manifest entries verified, no failed hashes. Typed prefix Parquet readback counts: ToN5000, BoT5000, LAN25000 (five5000-row source prefixes). Runtime: Python3.13.18,4CPUs, Spark4.0.1; all17recorded stages complete. Prefix scope includes heavily quarantined chronology boundaries and does not establish viable full-source splits or classifier accuracy.

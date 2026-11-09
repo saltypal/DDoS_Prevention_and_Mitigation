@@ -51,9 +51,11 @@ def main():
             np.testing.assert_allclose(before,after,rtol=1e-8,atol=1e-10)
             print('RELOAD VERIFIED',family,flush=True)
         import resource
-        write_json(root / 'bundle.json', dict(request, contract=contract, fit_seconds=seconds,
+        bundle = dict(request, contract=contract, fit_seconds=seconds,
                                              peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
-                                             raw_score_semantics='sigmoid-margin' if family == 'linear_svm' else 'uncalibrated_probability'))
+                                             raw_score_semantics='sigmoid-margin' if family == 'linear_svm' else 'uncalibrated_probability',
+                                             prediction_timings={})
+        write_json(root / 'bundle.json',bundle)
         for name, path in request['predict'].items():
             table = pd.read_parquet(path)
             start = time.monotonic()
@@ -64,7 +66,12 @@ def main():
             if not np.isfinite(scores).all():
                 raise RuntimeError(f'Nonfinite scores: {name}')
             table[['row_id']].assign(score=scores).to_parquet(root / f'{name}-scores.parquet', index=False)
-            print('SCORED', name, len(table), 'seconds', time.monotonic() - start, flush=True)
+            elapsed=time.monotonic()-start
+            bundle['prediction_timings'][name]={'rows':len(table),'seconds':elapsed,
+                                               'scope':'batch transform, scoring and score export; excludes model load'}
+            bundle['peak_process_rss_kib']=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+            write_json(root/'bundle.json',bundle)
+            print('SCORED', name, len(table), 'seconds', elapsed, flush=True)
         print('FIT COMPLETE', family, seconds, flush=True)
     finally:
         if spark:

@@ -139,3 +139,90 @@ Before launch, verify representative artifact write/read/export. After completio
 - Artifacts: source snapshot `experiments/public_dataset_la/runs/public-investigation-20261107-v2/source_snapshot/`; retrieval at `experiments/public_dataset_la/runs/public-investigation-20261107-v2/retrieved/`; report map in `verification_summary.json` and `retrieval_manifest.json`. V1 source and results remain preserved.
 - V1 gap mapping: v1 LAN identifier exclusions omitted `src_MAC`, `dst_MAC`, `subflow_id`; v2 includes them. V1 BCCC broad-label audit treated fine-grained `activity` as a predictor; v2 makes it a target and excludes it and `label` from predictors. V1 aggregate LAN exact duplicate and NF schema findings were unaffected. No training or publication occurred.
 
+
+
+## Staged modular-kaggle-preflight-20261109-v2
+
+{
+  "run_id": "modular-kaggle-preflight-20261109-v2",
+  "notebook_identity": "satyapaladugu/sdn-ddos-modular-prefix-preflight",
+  "source_commit": "27fa7ef0162a4810dfba1579f951ffa6cda26ff3",
+  "utc": "2026-11-09T06:47:38.080096+00:00",
+  "source_sha256": "026ea31ad0ba9e9ddadce5a7b0c3ee0975b56d8e439c5e3358a4b297195ec3d3",
+  "inputs": [
+    "seyhed/nf-ton-iot-v3",
+    "seyhed/nf-bot-iot-v3"
+  ],
+  "upstream": [],
+  "status": "staged",
+  "expected_remote_root": "/kaggle/working/experiments/public_dataset_la/runs/<timestamped-run-id>/",
+  "expected_local_evidence": "D:\\Bunker\\BaseCamp\\WirelessCommunication\\DDoS_Prevention_and_Mitigation\\experiments\\public_dataset_la\\runs\\modular-kaggle-preflight-20261109-v2\\retrieved"
+}
+
+
+## Staged model-contract-kaggle-20261109-v1
+
+{
+  "run_id": "model-contract-kaggle-20261109-v1",
+  "notebook_identity": "satyapaladugu/sdn-ddos-model-contract-preflight",
+  "source_commit": "27fa7ef0162a4810dfba1579f951ffa6cda26ff3",
+  "utc": "2026-11-09T06:48:00.309577+00:00",
+  "source_sha256": "bc82a862a14936cda83a351b3ec1beba3bbdb0073924dd050466be1370f7c8b6",
+  "inputs": [],
+  "upstream": [],
+  "status": "staged",
+  "expected_remote_root": "/kaggle/working/experiments/public_dataset_la/runs/<timestamped-run-id>/",
+  "expected_local_evidence": "D:\\Bunker\\BaseCamp\\WirelessCommunication\\DDoS_Prevention_and_Mitigation\\experiments\\public_dataset_la\\runs\\model-contract-kaggle-20261109-v1\\retrieved"
+}
+
+
+## Staged lan-preparation-kaggle-20261109-v1
+
+{
+  "run_id": "lan-preparation-kaggle-20261109-v1",
+  "notebook_identity": "satyapaladugu/sdn-ddos-lan-preparation",
+  "source_commit": "27fa7ef0162a4810dfba1579f951ffa6cda26ff3",
+  "utc": "2026-11-09T06:48:25.405524+00:00",
+  "source_sha256": "dfdcc235b47b4c15fe2c3faa352adcb8a46ee3d7b997612be613f498bfef98bf",
+  "inputs": [],
+  "upstream": [],
+  "status": "staged",
+  "expected_remote_root": "/kaggle/working/experiments/public_dataset_la/runs/<timestamped-run-id>/",
+  "expected_local_evidence": "D:\\Bunker\\BaseCamp\\WirelessCommunication\\DDoS_Prevention_and_Mitigation\\experiments\\public_dataset_la\\runs\\lan-preparation-kaggle-20261109-v1\\retrieved"
+}
+
+
+## Staged bot-preparation-kaggle-20261109-v1
+
+{
+  "run_id": "bot-preparation-kaggle-20261109-v1",
+  "notebook_identity": "satyapaladugu/sdn-ddos-bot-preparation",
+  "source_commit": "27fa7ef0162a4810dfba1579f951ffa6cda26ff3",
+  "utc": "2026-11-09T07:02:24.288267+00:00",
+  "source_sha256": "1d33ae7c2e87fccacebbf3b717f1048fb7234cd144a578c6194050d1b05cc25f",
+  "inputs": [
+    "seyhed/nf-bot-iot-v3"
+  ],
+  "upstream": [],
+  "status": "staged",
+  "expected_remote_root": "/kaggle/working/experiments/public_dataset_la/runs/<timestamped-run-id>/",
+  "expected_local_evidence": "D:\\Bunker\\BaseCamp\\WirelessCommunication\\DDoS_Prevention_and_Mitigation\\experiments\\public_dataset_la\\runs\\bot-preparation-kaggle-20261109-v1\\retrieved"
+}
+
+
+## Staged ton-preparation-kaggle-20261109-v1
+
+{
+  "run_id": "ton-preparation-kaggle-20261109-v1",
+  "notebook_identity": "satyapaladugu/sdn-ddos-ton-preparation",
+  "source_commit": "27fa7ef0162a4810dfba1579f951ffa6cda26ff3",
+  "utc": "2026-11-09T07:02:24.315793+00:00",
+  "source_sha256": "db15017136145696a4eb09e9d82a6511a1a69a319826804bf66054108ccc3525",
+  "inputs": [
+    "seyhed/nf-ton-iot-v3"
+  ],
+  "upstream": [],
+  "status": "staged",
+  "expected_remote_root": "/kaggle/working/experiments/public_dataset_la/runs/<timestamped-run-id>/",
+  "expected_local_evidence": "D:\\Bunker\\BaseCamp\\WirelessCommunication\\DDoS_Prevention_and_Mitigation\\experiments\\public_dataset_la\\runs\\ton-preparation-kaggle-20261109-v1\\retrieved"
+}

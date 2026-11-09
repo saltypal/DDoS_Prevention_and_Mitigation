@@ -1,6 +1,6 @@
 {
   "name": "matched-classifier-pilot", "stage": "benchmark", "scope": "resource_pilot",
   "conditions": ["ton", "bot", "mixture", "lan"], "train_rows": 50000,
-  "development_rows": 30000, "fit_timeout_seconds": 600, "seed": 42,
+  "development_rows": 300000, "fit_timeout_seconds": 600, "seed": 42,
   "shuffle_partitions": 32, "spark_driver_memory": "8g", "prepared_root": "/kaggle/input"
 }

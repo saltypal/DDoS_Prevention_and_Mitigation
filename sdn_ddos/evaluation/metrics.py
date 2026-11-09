@@ -37,14 +37,20 @@ def choose_threshold(table, scores, fpr_limit=0.01):
     benign = table['is_benign'].to_numpy(dtype=bool)
     if benign.sum() < 100:
         raise ValueError('Insufficient benign threshold-development observations; no reliable 1% operating-point estimate')
+    groups = [benign]
+    if 'source' in table:
+        groups = [benign & table['source'].eq(source).to_numpy() for source in table['source'].unique()]
+        if any(group.sum() < 100 for group in groups):
+            raise ValueError('Each source needs at least100 benign threshold-development observations; increase the recorded development cohort')
     scores = np.asarray(scores)
     order = np.argsort(-scores, kind='stable')
     ordered = scores[order]
     positive = table['target'].to_numpy() == 1
     cumulative_benign = np.cumsum(benign[order])
     cumulative_positive = np.cumsum(positive[order])
+    cumulative_groups = [np.cumsum(group[order]) for group in groups]
     ends = np.r_[np.flatnonzero(ordered[:-1] != ordered[1:]), len(ordered) - 1]
-    feasible = [i for i in ends if cumulative_benign[i] / benign.sum() <= fpr_limit]
+    feasible = [i for i in ends if all(cumulative[i] / group.sum() <= fpr_limit for cumulative, group in zip(cumulative_groups,groups))]
     if not feasible:
         return float(np.nextafter(np.max(scores), np.inf))
     best = max(feasible, key=lambda i: (cumulative_positive[i], -cumulative_benign[i], ordered[i]))

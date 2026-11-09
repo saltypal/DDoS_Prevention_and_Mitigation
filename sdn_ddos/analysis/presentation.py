@@ -6,6 +6,9 @@ import pandas as pd
 
 def one_artifact(root, relative):
     hits = list(Path(root).rglob(relative))
+    if not hits:
+        from sdn_ddos.data.layout import materialize_layouts
+        hits=[p for layout in materialize_layouts(root) for p in layout.rglob(relative)]
     if len(hits) != 1:
         raise ValueError(f'Attach one version-specific upstream output containing {relative}; found {hits}')
     return hits[0]
@@ -69,6 +72,10 @@ def show_la2(condition, root='/kaggle/input'):
                          'These scores do not establish final-test or unseen-source performance.'))
         family_record = next(r for r in records if r['family']==row['family'])
         display(pd.DataFrame(family_record['development_metrics']['families']).T)
+        from IPython.display import Image
+        diagnostics=path.parent.parent/'figures'/f'{condition}-{row["family"]}'
+        for figure in sorted(diagnostics.glob('*.png')):
+            display(Image(filename=str(figure)))
     for filename in ('ensemble-development.json','moe-development.json'):
         hits = list(Path(root).rglob('reports/'+filename))
         if len(hits)==1:

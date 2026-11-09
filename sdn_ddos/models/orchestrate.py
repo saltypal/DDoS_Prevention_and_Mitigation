@@ -87,6 +87,8 @@ def calibrated_result(name, raw, tables, config, destination):
     destination.mkdir(parents=True)
     joblib.dump(calibrator, destination / 'calibrator.joblib')
     write_json(destination / 'metrics.json', result)
+    from sdn_ddos.evaluation.plots import diagnostics
+    diagnostics(tables['selection'],scores['selection'],destination/'diagnostics',threshold,calibrated=True)
     for part, values in scores.items():
         tables[part][['row_id']].assign(raw_score=raw[part], score=values).to_parquet(destination / f'{part}-scores.parquet', index=False)
     return result

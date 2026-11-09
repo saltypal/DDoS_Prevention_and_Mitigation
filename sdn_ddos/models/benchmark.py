@@ -14,12 +14,19 @@ from sdn_ddos.evaluation.alignment import align_scores
 
 def resolve_prepared(config):
     root = Path(config.get('prepared_root', '/kaggle/input'))
+    from sdn_ddos.data.layout import materialize_layouts
+    layouts=materialize_layouts(root)
     manifests = {}
-    for source in ('ton', 'bot', 'lan'):
-        hits = list(root.rglob(f'{source}-prepared.json'))
+    conditions=config.get('conditions',['ton','bot','mixture','lan'])
+    required=sorted({source for condition in conditions for source in (['ton','bot'] if condition=='mixture' else [condition])})
+    for source in required:
+        hits = list(root.rglob(f'{source}-prepared.json')) + [p for layout in layouts for p in layout.rglob(f'{source}-prepared.json')]
         if len(hits) != 1:
             raise RuntimeError(f'Expected one version-pinned {source} preparation manifest under {root}; found {hits}')
         manifest = json.loads(hits[0].read_text())
+        expected=config.get('expected_preparation_sha256',{}).get(source)
+        if expected and sha256(hits[0])!=expected:
+            raise RuntimeError(f'{source}: prepared artifact changed from its pinned input manifest')
         if manifest['scope'] != 'full':
             raise RuntimeError('Prefix smoke artifacts cannot supply benchmark data')
         manifests[source] = (manifest, hits[0].parent.parent / 'parquet' / source)
@@ -77,7 +84,10 @@ def cohorts(spark, config, run):
         train.to_parquet(path / 'train.parquet', index=False)
         for name, pieces in sets.items():
             pd.concat(pieces, ignore_index=True).to_parquet(path / f'{name}.parquet', index=False)
-        metadata = {'condition': condition, 'contract': contracts[0], 'train_rows': len(train),
+        shared_contract = dict(contracts[0], training_sources=sources)
+        if condition == 'mixture':
+            shared_contract['source'] = 'nf_v3_common'
+        metadata = {'condition': condition, 'contract': shared_contract, 'train_rows': len(train),
                     'sources': sources, 'equal_requested_budget': budget, 'scope': config.get('scope', 'pilot'),
                     'hashes': {p.name: sha256(p) for p in path.glob('*.parquet')},
                     'source_manifests': {s: manifests[s][0] for s in sources}}
@@ -132,6 +142,12 @@ def benchmark(spark, config, run):
                     table = pd.read_parquet(path / 'selection.parquet')
                     scores = align_scores(destination / 'selection-scores.parquet', table)
                     record['development_metrics'] = evaluate(table, scores, calibrated=False)
+                    from sdn_ddos.evaluation.plots import diagnostics
+                    diagnostics(table,scores,run.root/'figures'/f'{condition}-{family}')
+                    details=json.loads((destination/'bundle.json').read_text())
+                    record['fit_seconds']=details['fit_seconds']
+                    record['peak_process_rss_kib']=details['peak_process_rss_kib']
+                    record['prediction_timings']=details.get('prediction_timings',{})
                 ledger.append(record)
                 write_json(run.root / 'reports' / 'benchmark.json', ledger)
                 print('FIT OUTCOME', record, flush=True)
