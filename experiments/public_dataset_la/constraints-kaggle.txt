@@ -1,0 +1,10 @@
+# Primary versions actually observed in successful prefix preflight v1.
+# This constrains core numerical/model packages, not the complete managed image.
+numpy==2.1.3
+pandas==2.3.3
+pyarrow==23.0.1
+scikit-learn==1.6.1
+pyspark==4.0.1
+xgboost==3.4.1
+lightgbm==4.6.0
+catboost==1.2.10

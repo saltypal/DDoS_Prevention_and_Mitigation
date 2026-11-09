@@ -1,8 +1,20 @@
 # Kaggle notebook and artifact map
 
+## Verified modular prefix preflight v1 — 2026-11-09
+
+Actual identity `satyapaladugu/sdn-ddos-modular-prefix-preflight`, version1, COMPLETE. Pinned source9214fee8e09c6414df63b9e659cdb592622459e4. Verified local retrieval at `experiments/public_dataset_la/runs/modular-kaggle-preflight-20261109-v1/retrieved/`; summary `verification_summary.json` confirms94/94hashes and Parquet ToN5000/BoT5000/LAN25000rows. Actual remote root `/kaggle/working/experiments/public_dataset_la/runs/modular-source-preflight-20261109T052706Z/`. All17runtime/module stages report complete. Runtime Python3.13.18,4CPU,Spark4.0.1. This is source-prefix smoke, not a prepared final dataset or trained detector. Native returned kernel log is0bytes; use incremental logs and executed-cell capture. The stale RUNNING expectation in the earlier submission entry below is superseded by this result. Preserve version1; use the SAME returned identity for future preflight versions.
+
 Updated: 2026-11-07, Asia/Calcutta.
 Current state: topology capability preflight completed; public-data investigation prepared. Actual submissions and retrieval are recorded below.
 Canonical decisions: [Journal.md](Journal.md), [DATASET_PLAN.md](DATASET_PLAN.md), [design configuration](experiments/topology_dataset/configs/dataset_v1.json).
+
+## Modular Kaggle prefix preflight — planned submission
+
+Run ID: `modular-kaggle-preflight-20261109-v1`. Submitted as notebook version1. Kaggle returned URL `https://www.kaggle.com/code/satyapaladugu/sdn-ddos-modular-prefix-preflight`; this is the actual stable identity. The intended metadata id `sdn-ddos-modular-preflight` was not resolvable from the title; CLI warned and created the title-derived slug. Owned-kernel search confirms the returned identity, and `kaggle kernels status` reports RUNNING. Do not create a second identity or update/interrupt this active run. Canonical notebook: `experiments/public_dataset_la/notebooks/00_modular_preflight.ipynb`. Immutable staged copy and metadata: `experiments/public_dataset_la/runs/modular-kaggle-preflight-20261109-v1/source_snapshot/`. Staged notebook pins repository `https://github.com/saltypal/DDoS_Prevention_and_Mitigation.git` to commit `9214fee8e09c6414df63b9e659cdb592622459e4`; SHA-256 manifest is alongside the staged files. Submission logs are under the run's `logs/` directory.
+
+Purpose and configuration: bounded prefix smoke only, `smoke_rows_per_file=5000`, `csv_chunk_rows=5000`, `plot_rows=2000`, `shuffle_partitions=8`, Spark driver memory `4g`; no classifier training, no final split, no accuracy claim. Kaggle managed Python notebook, private, internet enabled, GPU disabled. Attach `seyhed/nf-ton-iot-v3` and `seyhed/nf-bot-iot-v3` (observed version1; verify actual mounts/versions/hashes in runtime). LAN-SDN-NIDS is downloaded remotely from official DOI `10.21950/QMAXKP`, observed source version3.0 in prior audit; verify remote metadata/files and checksums. Inputs are read only. Local Python/JVM is not uploaded; notebook reports Kaggle Python/Java/PySpark and Spark JVM startup.
+
+Expected output root: `/kaggle/working/experiments/public_dataset_la/runs/modular-source-preflight/` as specified by the pinned configuration. Expected contents include runtime/source/input provenance, prefix-only row and class counts, contract/quality reports, Parquet smoke outputs, figures where configured, SHA-256 manifest, incremental cell-capture logs and kernel log. Expected local retrieval: `experiments/public_dataset_la/runs/modular-kaggle-preflight-20261109-v1/retrieved/`. These are expectations until verified. After submission, record returned notebook version/run status and actual saved paths here before reporting completion. Do not retrieve bulk raw datasets.
 
 ## Stable notebook identities
 

@@ -38,7 +38,21 @@ def main():
             model.fit(train, train['target'])
             joblib.dump(model, root / 'python_model.joblib')
         seconds = time.monotonic() - start
+        if request.get('verify_reload', True):
+            probe = train.iloc[:min(32,len(train))]
+            if family in SPARK_FAMILIES:
+                from pyspark.ml import PipelineModel
+                restored = PipelineModel.load(str(root / 'spark_model'))
+                before = predict_spark(model,probe,contract,spark)
+                after = predict_spark(restored,probe,contract,spark)
+            else:
+                restored = joblib.load(root / 'python_model.joblib')
+                before, after = model.predict_proba(probe), restored.predict_proba(probe)
+            np.testing.assert_allclose(before,after,rtol=1e-8,atol=1e-10)
+            print('RELOAD VERIFIED',family,flush=True)
+        import resource
         write_json(root / 'bundle.json', dict(request, contract=contract, fit_seconds=seconds,
+                                             peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
                                              raw_score_semantics='sigmoid-margin' if family == 'linear_svm' else 'uncalibrated_probability'))
         for name, path in request['predict'].items():
             table = pd.read_parquet(path)

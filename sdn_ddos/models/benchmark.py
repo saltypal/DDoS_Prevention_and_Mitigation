@@ -9,6 +9,7 @@ import pandas as pd
 from sdn_ddos.models.classifiers import FAMILIES
 from sdn_ddos.runtime.run import write_json, sha256
 from sdn_ddos.evaluation.metrics import evaluate
+from sdn_ddos.evaluation.alignment import align_scores
 
 
 def resolve_prepared(config):
@@ -50,12 +51,16 @@ def cohorts(spark, config, run):
                 contradictions = others.groupBy('feature_group').agg(F.countDistinct('target').alias('n')).filter('n > 1').select('feature_group')
                 train = train.join(contradictions, 'feature_group', 'left_anti')
                 development = development.join(contradictions, 'feature_group', 'left_anti')
+                tests = others.filter("split = 'test'").select('feature_group').distinct()
+                development = development.join(tests, 'feature_group', 'left_anti')
             # Equal total training budget. Hash sort is deterministic and label-independent.
             train = train.dropDuplicates(['feature_group', 'target']).orderBy(F.sha2(F.concat_ws(':', F.col('row_id'), F.lit(str(config.get('seed', 42)))), 256)).limit(budget // len(sources))
             dev = development.orderBy(F.sha2('row_id', 256)).limit(dev_budget // len(sources))
             train_parts.append(train.toPandas())
             dev_parts.append(dev.toPandas())
         train = pd.concat(train_parts, ignore_index=True)
+        if len(train) != budget:
+            raise RuntimeError(f'{condition}: requested matched budget {budget}, obtained {len(train)}. Reduce the common budget explicitly after resource review.')
         development = pd.concat(dev_parts, ignore_index=True).sort_values(['source', 'time_start', 'row_id']).reset_index(drop=True)
         if train['target'].nunique() != 2:
             raise RuntimeError(f'{condition}: training cohort lacks a class')
@@ -125,9 +130,8 @@ def benchmark(spark, config, run):
                 record = dict(condition=condition, family=family, **outcome)
                 if outcome['status'] == 'complete':
                     table = pd.read_parquet(path / 'selection.parquet')
-                    scores = pd.read_parquet(destination / 'selection-scores.parquet')
-                    aligned = table[['row_id']].merge(scores, on='row_id', how='left', validate='one_to_one')
-                    record['development_metrics'] = evaluate(table, aligned['score'].to_numpy(), calibrated=False)
+                    scores = align_scores(destination / 'selection-scores.parquet', table)
+                    record['development_metrics'] = evaluate(table, scores, calibrated=False)
                 ledger.append(record)
                 write_json(run.root / 'reports' / 'benchmark.json', ledger)
                 print('FIT OUTCOME', record, flush=True)

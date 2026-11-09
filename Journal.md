@@ -1,5 +1,17 @@
 # Project journal
 
+## EXECUTION UPDATE — verified modular Kaggle prefix preflight
+
+Actual stable identity: https://www.kaggle.com/code/satyapaladugu/sdn-ddos-modular-prefix-preflight , version1, pinned commit9214fee8e09c6414df63b9e659cdb592622459e4. Completed and retrieved;94/94 manifest entries verified, no failed hashes. Typed prefix Parquet readback counts: ToN5000, BoT5000, LAN25000 (five5000-row source prefixes). Runtime: Python3.13.18,4CPUs, Spark4.0.1; all17recorded stages complete. Prefix scope includes heavily quarantined chronology boundaries and does not establish viable full-source splits or classifier accuracy.
+
+Core runtime package constraints now use the versions actually observed in this preflight; full dependency resolution remains recorded per run. Full NF source SHA256 pins copied from verified source-input manifests into configuration. Retrieved evidence: experiments/public_dataset_la/runs/modular-kaggle-preflight-20261109-v1/retrieved/verification_summary.json. Native kernel log returned zero bytes; incremental cell/module logs and executed-cell notebook provide tested evidence. Do not promise unavailable bootstrap stdout capture.
+
+Luna's bounded review confirmed an extra-score-ID integrity gap and flagged diversity correlations depending on physical row order. Accepted both: shared strict score/cohort identity validation now rejects extras/missing/duplicates and all diversity inputs align by row_id. A new regression fixture covers shuffled and wrong/extra rows. Local contract checks now6/6pass. Current new modules include OOF ensemble/domain-MoE orchestration, trusted bundle inference, frozen base/combination evaluation, and LA1/LA2 artifact views; these new model paths remain unexecuted on real datasets. Source-specific preparation launchers share one implementation and permit independent recoverable runs. Old inline EDA builder retired; its original source remains in Git history.
+
+Luna operational monitoring hit its account usage limit after retrieving preflight evidence. Main thread performs the remaining bounded operational checks directly; no alternative subagent/provider was invoked. Next runs: updated pinned source smoke, generated model-contract preflight (no accuracy evidence), and independently saved full-source preparation after runtime checks. Full preparation must stop visibly on class/overlap/quarantine problems.
+
+---
+
 ## EXECUTION — 2026-11-09: modular Kaggle pipeline begins
 
 User explicitly authorized direct implementation and completion of the dataset, classifier, ensemble/MoE and LA1/LA2 work. Earlier MiMo attempts produced no deliverables; direct Codex implementation is now active. User approved a PUBLIC SOURCE-ONLY repository and explicitly selected authenticated GitHub owner saltypal after API identity verification. Repository: https://github.com/saltypal/DDoS_Prevention_and_Mitigation . Source/data separation is enforced by .gitignore; bulk runs, data and captured paper text are not published.

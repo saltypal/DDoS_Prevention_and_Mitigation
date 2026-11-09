@@ -1,5 +1,9 @@
 {
   "name": "modular-source-preflight", "stage": "prepare", "sources": ["ton", "bot", "lan"],
   "smoke_rows_per_file": 5000, "csv_chunk_rows": 5000, "plot_rows": 2000,
-  "shuffle_partitions": 8, "spark_driver_memory": "4g", "scope": "prefix_smoke_only"
+  "shuffle_partitions": 8, "spark_driver_memory": "4g", "scope": "prefix_smoke_only",
+  "source_sha256": {
+    "NF-ToN-IoT-v3.csv": "53ec8f468a43ede9b1536fabc0390af2fa33ab4312b23ce4d864f186a4651f78",
+    "NF-BoT-IoT-v3.csv": "8bde1f6f1c8bc59dcb49828fb5b9d65c0b63e06d92b2b9f15b37159e923009ea"
+  }
 }

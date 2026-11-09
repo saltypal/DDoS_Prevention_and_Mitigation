@@ -1,5 +1,9 @@
 {
   "name": "public-data-preparation", "stage": "prepare", "sources": ["ton", "bot", "lan"],
   "csv_chunk_rows": 100000, "plot_rows": 20000, "embargo_seconds": 60,
-  "shuffle_partitions": 32, "spark_driver_memory": "8g", "scope": "full"
+  "shuffle_partitions": 32, "spark_driver_memory": "8g", "scope": "full",
+  "source_sha256": {
+    "NF-ToN-IoT-v3.csv": "53ec8f468a43ede9b1536fabc0390af2fa33ab4312b23ce4d864f186a4651f78",
+    "NF-BoT-IoT-v3.csv": "8bde1f6f1c8bc59dcb49828fb5b9d65c0b63e06d92b2b9f15b37159e923009ea"
+  }
 }

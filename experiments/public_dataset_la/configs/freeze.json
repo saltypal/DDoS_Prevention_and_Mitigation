@@ -1,0 +1,4 @@
+{
+  "name": "freeze-final-candidates", "stage": "freeze", "benchmark_root": "/kaggle/input",
+  "test_rows": 50000, "benign_fpr_limit": 0.01
+}

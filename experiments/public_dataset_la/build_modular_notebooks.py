@@ -26,7 +26,7 @@ if not shutil.which('java'):
     subprocess.run(['apt-get','update','-qq'],check=True,timeout=300)
     subprocess.run(['apt-get','install','-y','openjdk-17-jre-headless'],check=True,timeout=600)
 subprocess.run(['java','-version'],check=True)
-subprocess.run([sys.executable,'-m','pip','install','--disable-pip-version-check','-e',str(checkout)+'[spark,boost,notebooks]'],check=True,timeout=900)
+subprocess.run([sys.executable,'-m','pip','install','--disable-pip-version-check','-c',str(checkout/'experiments/public_dataset_la/constraints-kaggle.txt'),'-e',str(checkout)+'[spark,boost,notebooks]'],check=True,timeout=900)
 sys.path.insert(0,str(checkout))
 import os
 os.chdir(checkout)
@@ -52,6 +52,9 @@ print('END configuration', flush=True)
 """
     if filename == '02_engineering_eda.ipynb':
         config_code += "config['stage']='audit'\nconfig['name']='engineering-eda'\n"
+    for source in ('ton','bot','lan'):
+        if filename == f'03_prepare_{source}.ipynb':
+            config_code += f"config['sources']=['{source}']\nconfig['name']='prepare-{source}'\n"
     nb = nbf.v4.new_notebook(cells=[nbf.v4.new_markdown_cell(f'''# {title}
 Project: DDoS_Prevention_and_Mitigation. Kaggle CPU; internet enabled. Source: {URL}
 {description}
@@ -78,8 +81,30 @@ Spark scaling from a local Kaggle executor. Final tests must remain outside mode
     print('Generated',path)
 
 
+def presentation(owner, source, level):
+    title = f'{level.upper()} — {owner}: {source}'
+    instruction = ('Attach the FULL completed preprocessing outputs. Show original sources, protocol, quarantine and five-plus development plots.'
+                   if level == 'la1' else 'Attach the completed classifier and combination outputs. Show all candidates and detailed inference for three leading models; never invent missing runs.')
+    code_source = f"from sdn_ddos.analysis.presentation import show_{level}\nprint('START {level} presentation',flush=True)\nshow_{level}('{source}')\nprint('END {level} presentation',flush=True)"
+    book = nbf.v4.new_notebook(cells=[nbf.v4.new_markdown_cell(f'# {title}\n{instruction}\nSource code and dependencies are revision-pinned by the bootstrap.\nSee experiments/public_dataset_la/DATASET_GUIDE.md for original testbed and modality details.'),cell(bootstrap),
+        cell("from IPython.display import display, Markdown\ndisplay(Markdown((checkout/'experiments/public_dataset_la/DATASET_GUIDE.md').read_text()))"),cell(code_source)])
+    book.metadata.kernelspec={'name':'python3','language':'python','display_name':'Python 3'}
+    nbf.validate(book)
+    nbf.write(book, DEST/f'{level}_{owner}_{source}.ipynb')
+
+
 if __name__ == '__main__':
     build('00_modular_preflight.ipynb','Modular source and data preflight','preflight.json','Prefix-only smoke; no classifier training or usable final splits.')
+    build('01_model_contract_preflight.ipynb','Classifier software-contract preflight','model_preflight.json','Generated software fixtures only: checks all 12 fit/save/reload/score paths. No public-data accuracy claim.')
     build('02_engineering_eda.ipynb','Engineering EDA','prepare.json','Descriptive audits with provisional protected partitions; no model fitting.')
     build('03_engineering_preprocessing.ipynb','Source sanitation and protected partitions','prepare.json','Full observational data preparation. Learned preprocessing is fitted within training/model folds.')
+    for source in ('ton','bot','lan'):
+        build(f'03_prepare_{source}.ipynb',f'{source}: isolated source preparation','prepare.json','Source-specific execution of the same preparation modules. Independent failures and saved versions; no forked preprocessing implementation.')
     build('04_classifier_benchmark.ipynb','Matched classifier resource pilot','benchmark.json','Attach the completed full-preparation notebook outputs. Fits 12 families on matched bounded cohorts; no final tests.')
+    build('05_ensemble_comparison.ipynb','OOF ensemble comparison','ensemble.json','Attach completed classifier benchmark outputs. Refit all fold preprocessing; compare calibrated constituents and combiners on development only.')
+    build('06_moe_comparison.ipynb','NetFlow domain-expert comparison','moe.json','Attach completed classifier benchmark outputs. ToN/BoT domain specialists and pooled generalist; LAN requires separate semantic alignment.')
+    build('07_freeze_candidates.ipynb','Freeze final candidate protocol','freeze.json','Rejects resource-pilot runs. Requires reviewed matched training artifacts; final tests remain unopened.')
+    build('08_final_crossover.ipynb','Frozen base-classifier final crossover','final.json','Attach full prepared sources, eligible benchmark and frozen-candidate outputs. Scores fixed cohorts without selecting from final scores. Combined-model final validation is separate.')
+    for owner,source in [('prithvi','ton'),('roydon','bot'),('satya','lan')]:
+        for level in ('la1','la2'):
+            presentation(owner,source,level)

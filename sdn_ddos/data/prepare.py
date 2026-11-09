@@ -11,7 +11,7 @@ def sanitize(raw, source, run):
     data = raw.withColumn('attack_family', F.lower(F.trim(F.col(target))))
     data = data.withColumn('attack_original', F.col(target))
     data = data.withColumn('original_binary_label', F.col('Label') if source != 'lan' else F.lit(None).cast('string'))
-    unknown = data.filter(~F.col('attack_family').isin(sorted(LABELS[source]))).groupBy('attack_family').count().collect()
+    unknown = data.filter(F.col('attack_family').isNull() | ~F.col('attack_family').isin(sorted(LABELS[source]))).groupBy('attack_family').count().collect()
     if unknown:
         raise RuntimeError(f'Unknown labels require audit: {unknown}')
     data = data.withColumn('target', (F.col('attack_family') == 'ddos').cast('double'))
@@ -32,6 +32,8 @@ def sanitize(raw, source, run):
         data = data.withColumn(name, F.when(value.isNull() | F.isnan(value) | (F.abs(value) == float('inf')), F.lit(None).cast('double')).otherwise(value))
     for name in contract['categorical']:
         data = data.withColumn(name, F.when(F.trim(F.col(name)).isin('', 'NaN', 'nan', 'null'), '__missing__').otherwise(F.trim(F.col(name))))
+    from sdn_ddos.features.derived import derive
+    data, contract = derive(data, source, contract)
     predictors = contract['numeric'] + contract['categorical']
     # JSON serialization avoids delimiter collisions and preserves explicit nulls.
     vector = F.to_json(F.struct(*[F.col(c).alias(c) for c in sorted(predictors)]), options={'ignoreNullFields': 'false'})
@@ -41,7 +43,7 @@ def sanitize(raw, source, run):
         data = data.withColumn('time_start', F.expr(f'try_cast({start} as double)') / 1000)
         data = data.withColumn('time_end', F.expr(f'try_cast({end} as double)') / 1000)
         keys = ['IPV4_SRC_ADDR', 'IPV4_DST_ADDR', 'L4_SRC_PORT', 'L4_DST_PORT', 'PROTOCOL']
-        data = data.withColumn('session_group', F.sha2(F.to_json(F.struct(*[F.col(c) for c in keys], F.floor(F.col('time_start') / 60).alias('minute'))), 256))
+        data = data.withColumn('session_group', F.sha2(F.to_json(F.struct(F.col('source'), *[F.col(c) for c in keys], F.floor(F.col('time_start') / 60).alias('minute'))), 256))
     else:
         # LAN temporal values are creator-exported; topology is the primary partition unit.
         data = data.withColumn('time_start', F.expr('try_cast(timestamp_1 as double)'))
@@ -62,6 +64,8 @@ def partition(data, source, config, run):
                       'scope': 'one held-out topology; not universal generalization'}
     else:
         invalid = data.filter(F.col('time_start').isNull() | F.col('time_end').isNull() |
+                              F.isnan('time_start') | F.isnan('time_end') |
+                              (F.abs(F.col('time_start')) == float('inf')) | (F.abs(F.col('time_end')) == float('inf')) |
                               (F.col('time_end') < F.col('time_start'))).count()
         if invalid:
             raise RuntimeError(f'{invalid} invalid timestamps require a documented quarantine policy')
@@ -75,19 +79,25 @@ def partition(data, source, config, run):
         boundaries = {'quantile_cuts_seconds': cuts, 'embargo_seconds': embargo,
                       'scope': 'chronological blocks; episode independence not established'}
     # Contradictory binary labels are quarantined, not resolved by majority vote.
-    conflicts = data.groupBy('feature_group').agg(F.countDistinct('target').alias('targets')).filter('targets > 1').select('feature_group')
+    groups = data.groupBy('feature_group').agg(F.countDistinct('target').alias('targets'), F.count('*').alias('observations'))
+    duplicate_report = groups.agg(F.count('*').alias('unique_selected_feature_groups'),
+                                 F.sum(F.col('observations') - 1).alias('duplicate_selected_feature_rows'),
+                                 F.max('observations').alias('largest_group')).first().asDict()
+    write_json(run.root / 'reports' / f'{source}-selected-feature-duplicates.json', duplicate_report)
+    conflicts = groups.filter('targets > 1').select('feature_group')
     conflicts_count = conflicts.count()
     data = data.join(conflicts.withColumn('conflict', F.lit(True)), 'feature_group', 'left')
     data = data.withColumn('split', F.when(F.col('conflict').isNotNull(), 'quarantine_conflict').otherwise(F.col('split'))).drop('conflict')
     # Keep final-test observations; purge earlier observations sharing selected features or flow groups.
     order = {'train': 0, 'development': 1, 'test': 2}
     rank = F.when(F.col('split') == 'train', 0).when(F.col('split') == 'development', 1).when(F.col('split') == 'test', 2).otherwise(-1)
-    data = data.withColumn('_rank', rank)
-    for group in ('feature_group', 'session_group'):
-        maximum = data.groupBy(group).agg(F.max('_rank').alias('_last'))
-        data = data.join(maximum, group).withColumn('split', F.when((F.col('_rank') >= 0) & (F.col('_rank') < F.col('_last')), 'quarantine_overlap').otherwise(F.col('split'))).drop('_last')
-        data = data.withColumn('_rank', rank)
-    data = data.drop('_rank')
+    ranked = data.withColumn('_rank', rank)
+    feature_max = ranked.groupBy('feature_group').agg(F.max('_rank').alias('_feature_last'))
+    session_max = ranked.groupBy('session_group').agg(F.max('_rank').alias('_session_last'))
+    data = ranked.join(feature_max, 'feature_group').join(session_max, 'session_group')
+    data = data.withColumn('split', F.when((F.col('_rank') >= 0) &
+                           ((F.col('_rank') < F.col('_feature_last')) | (F.col('_rank') < F.col('_session_last'))),
+                           'quarantine_overlap').otherwise(F.col('split'))).drop('_rank', '_feature_last', '_session_last')
     counts = [row.asDict() for row in data.groupBy('source', 'split', 'attack_family', 'target').count().collect()]
     write_json(run.root / 'reports' / f'{source}-split-counts.json', counts)
     write_json(run.root / 'contracts' / f'{source}-split-policy.json', dict(boundaries, conflict_groups=conflicts_count))
@@ -108,6 +118,10 @@ def prepare_source(source, spark, config, run):
         raw = ingest(specs, spark, config, run)
     with run.stage(f'{source}-sanitize'):
         clean, contract = sanitize(raw, source, run)
+        from pyspark import StorageLevel
+        clean = clean.persist(StorageLevel.DISK_ONLY)
+        print('MATERIALIZED SANITIZED ROWS', clean.count(), flush=True)
+        sanitized_cache = clean
     with run.stage(f'{source}-partitions'):
         clean = partition(clean, source, config, run)
         destination = run.root / 'parquet' / source
@@ -129,4 +143,5 @@ def prepare_source(source, spark, config, run):
                    'input_sha256': [s['sha256'] for s in specs]})
     with run.stage(f'{source}-eda'):
         profile(persisted, source, contract, config, run)
+    sanitized_cache.unpersist()
     return destination

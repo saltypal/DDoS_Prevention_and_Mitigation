@@ -1,0 +1,5 @@
+{
+  "name": "oof-ensemble-comparison", "stage": "ensemble", "benchmark_root": "/kaggle/input",
+  "conditions": ["ton", "bot", "mixture", "lan"], "folds": 3, "maximum_members": 3,
+  "fit_timeout_seconds": 600, "benign_fpr_limit": 0.01
+}

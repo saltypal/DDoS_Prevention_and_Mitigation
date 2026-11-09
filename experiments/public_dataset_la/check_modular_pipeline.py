@@ -5,12 +5,26 @@ import unittest
 import numpy as np
 import pandas as pd
 import nbformat
+import tempfile
+from sdn_ddos.evaluation.alignment import align_scores
 from sdn_ddos.models.combine import FeatureGate, WeightedMean, ProbabilityMean, grouped_folds
 from sdn_ddos.evaluation.metrics import evaluate, choose_threshold
 from sdn_ddos.features.contracts import feature_contract
 
 
 class ContractChecks(unittest.TestCase):
+    def test_score_identity(self):
+        root=Path(__file__).resolve().parent/'runs'/'contract-fixtures'
+        root.mkdir(parents=True,exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=root) as directory:
+            path=Path(directory)/'scores.parquet'
+            rows=pd.DataFrame({'row_id':['a','b']})
+            pd.DataFrame({'row_id':['b','a'],'score':[0.8,0.2]}).to_parquet(path,index=False)
+            np.testing.assert_allclose(align_scores(path,rows),[0.2,0.8])
+            pd.DataFrame({'row_id':['a','b','extra'],'score':[0.2,0.8,0.5]}).to_parquet(path,index=False)
+            with self.assertRaises(ValueError): align_scores(path,rows)
+            pd.DataFrame({'row_id':['a','wrong'],'score':[0.2,0.8]}).to_parquet(path,index=False)
+            with self.assertRaises(ValueError): align_scores(path,rows)
     def test_feature_exclusions(self):
         columns = ['row_id', 'source', 'topology', 'Attack', 'Label', 'DNS_QUERY_ID', 'FLOW_START_MILLISECONDS', 'IN_BYTES', 'PROTOCOL']
         result = feature_contract('ton', columns)
@@ -52,8 +66,9 @@ class ContractChecks(unittest.TestCase):
 
     def test_generated_notebooks(self):
         root=Path(__file__).resolve().parent
-        for name in ['00_modular_preflight.ipynb','02_engineering_eda.ipynb','03_engineering_preprocessing.ipynb','04_classifier_benchmark.ipynb']:
-            book=nbformat.read(root/'notebooks'/name,as_version=4)
+        for path in (root/'notebooks').glob('*.ipynb'):
+            if path.name=='01_public_dataset_investigation.ipynb': continue
+            book=nbformat.read(path,as_version=4)
             nbformat.validate(book)
             for cell in book.cells:
                 if cell.cell_type=='code': ast.parse(cell.source)

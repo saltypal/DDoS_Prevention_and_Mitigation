@@ -1,5 +1,7 @@
 # Kaggle DDoS data and detector implementation brief
 
+> Historical planning brief. The latest Journal.md architecture/execution entries supersede worker-only ownership and inline-notebook clauses. Current implementation uses the modular sdn_ddos package and build_modular_notebooks.py. Preserve the scientific safeguards below; follow README.md for current execution.
+
 Date: 2026-11-09, Asia/Calcutta. Status: approved direction from user; implementation not started by this brief. Canonical decisions live in Journal.md; this file is the implementation contract, not another project copy.
 
 ## 1. Objective and boundaries

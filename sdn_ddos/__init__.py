@@ -1,1 +1,1 @@
-"""Measured SDN topology dataset collection."""
+"""Modular SDN topology and multi-source DDoS detection research."""

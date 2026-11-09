@@ -57,12 +57,19 @@ class Run:
         environment = {'python': sys.version, 'executable': sys.executable, 'platform': platform.platform(),
                        'cpu_count': os.cpu_count(), 'revision': revision.stdout.strip() or 'uncommitted-snapshot',
                        'cwd': str(Path.cwd()), 'utc': datetime.now(timezone.utc).isoformat(), 'packages': {}}
+        import shutil
+        if shutil.which('java'):
+            java = subprocess.run(['java','-version'],capture_output=True,text=True)
+            environment['java_version'] = (java.stderr + java.stdout).strip()
+        environment['gpu_runtime_requested'] = False
         for package in ('numpy', 'pandas', 'pyarrow', 'scikit-learn', 'pyspark', 'xgboost', 'lightgbm', 'catboost'):
             try:
                 environment['packages'][package] = importlib.metadata.version(package)
             except importlib.metadata.PackageNotFoundError:
                 environment['packages'][package] = None
         write_json(self.root / 'environment.json', environment)
+        freeze = subprocess.run([sys.executable, '-m', 'pip', 'freeze'], capture_output=True, text=True)
+        (self.root / 'resolved-packages.txt').write_text(freeze.stdout, encoding='utf-8')
         print('RUN', self.root, environment, flush=True)
 
     @contextlib.contextmanager

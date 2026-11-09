@@ -1,0 +1,5 @@
+{
+  "name": "frozen-final-evaluation", "stage": "final", "benchmark_root": "/kaggle/input",
+  "prepared_root": "/kaggle/input", "frozen_candidates": null,
+  "test_rows": 50000, "benign_fpr_limit": 0.01, "spark_driver_memory": "8g"
+}

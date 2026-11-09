@@ -13,6 +13,21 @@ def execute(config, output=None):
     run = Run(root, config)
     spark = None
     try:
+        if config['stage'] == 'model-smoke':
+            from sdn_ddos.models.smoke import model_smoke
+            model_smoke(config,run)
+            return run.root
+        if config['stage'] == 'freeze':
+            from sdn_ddos.evaluation.final import freeze_candidates
+            freeze_candidates(config, run)
+            return run.root
+        if config['stage'] in ('ensemble', 'moe'):
+            from sdn_ddos.models.orchestrate import ensembles, domain_moe
+            if config['stage'] == 'ensemble':
+                ensembles(config, run)
+            else:
+                domain_moe(config, run)
+            return run.root
         spark = spark_session(config)
         with run.stage('runtime-preflight'):
             print('Spark version', spark.version, 'master', spark.sparkContext.master, flush=True)
@@ -34,6 +49,9 @@ def execute(config, output=None):
         elif config['stage'] == 'benchmark':
             from sdn_ddos.models.benchmark import benchmark
             benchmark(spark, config, run)
+        elif config['stage'] == 'final':
+            from sdn_ddos.evaluation.final import base_crossover
+            base_crossover(spark, config, run)
         else:
             raise ValueError(f'Unknown stage {config["stage"]}')
     finally:

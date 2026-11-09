@@ -15,7 +15,7 @@ def python_pipeline(family, contract, seed=42):
     from sklearn.ensemble import HistGradientBoostingClassifier
     numeric = Pipeline([('impute', SimpleImputer(strategy='median', add_indicator=True, keep_empty_features=True))])
     categorical = Pipeline([('impute', SimpleImputer(strategy='constant', fill_value='__missing__')),
-                            ('encode', OneHotEncoder(handle_unknown='ignore', sparse_output=False, max_categories=64))])
+                            ('encode', OneHotEncoder(handle_unknown='ignore', sparse_output=False))])
     prep = ColumnTransformer([('numeric', numeric, contract['numeric']), ('categorical', categorical, contract['categorical'])])
     if family == 'hist_gradient_boosting':
         classifier = HistGradientBoostingClassifier(max_iter=100, max_leaf_nodes=15, l2_regularization=1, random_state=seed)

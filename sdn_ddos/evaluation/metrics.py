@@ -3,7 +3,7 @@ from sklearn.metrics import (confusion_matrix, precision_recall_fscore_support, 
                              roc_auc_score, matthews_corrcoef, balanced_accuracy_score, brier_score_loss)
 
 
-def evaluate(table, scores, threshold=0.5, calibrated=True):
+def evaluate(table, scores, threshold=0.5, calibrated=True, _subgroups=True):
     scores = np.asarray(scores, dtype=float)
     if len(scores) != len(table) or not np.isfinite(scores).all():
         raise ValueError('Scores must align with rows and be finite')
@@ -23,6 +23,12 @@ def evaluate(table, scores, threshold=0.5, calibrated=True):
               'benign_fpr': benign_fp / int(benign.sum()) if benign.sum() else None, 'families': {}}
     for family, indices in table.groupby('attack_family').indices.items():
         result['families'][str(family)] = {'rows': len(indices), 'ddos_predictions': int(prediction[indices].sum())}
+    if _subgroups:
+        for column in ('source', 'topology'):
+            if column in table:
+                result[column + '_breakdown'] = {str(group): evaluate(table.iloc[indices].reset_index(drop=True), scores[indices], threshold,
+                                                                     calibrated=calibrated, _subgroups=False)
+                                                 for group, indices in table.groupby(column).indices.items()}
     return result
 
 

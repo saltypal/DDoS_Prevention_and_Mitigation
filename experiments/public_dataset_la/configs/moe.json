@@ -1,0 +1,4 @@
+{
+  "name": "nf-domain-moe-comparison", "stage": "moe", "benchmark_root": "/kaggle/input",
+  "folds": 3, "fit_timeout_seconds": 600, "benign_fpr_limit": 0.01
+}
