@@ -226,3 +226,33 @@ Before launch, verify representative artifact write/read/export. After completio
   "expected_remote_root": "/kaggle/working/experiments/public_dataset_la/runs/<timestamped-run-id>/",
   "expected_local_evidence": "D:\\Bunker\\BaseCamp\\WirelessCommunication\\DDoS_Prevention_and_Mitigation\\experiments\\public_dataset_la\\runs\\ton-preparation-kaggle-20261109-v1\\retrieved"
 }
+
+
+## Staged lan-classifier-pilot-20261109-v1
+
+{
+  "run_id": "lan-classifier-pilot-20261109-v1",
+  "notebook_identity": "satyapaladugu/sdn-ddos-lan-classifier-benchmark",
+  "source_commit": "5bf096bb15f6ad28c3c4b138f63c9a4b79dfc976",
+  "utc": "2026-11-09T07:08:20.440017+00:00",
+  "source_sha256": "d126437112c40e8bc4e3cbc0f62896921097883af885546fcf68ebe431eebcf2",
+  "inputs": [],
+  "upstream": [
+    "satyapaladugu/sdn-ddos-lan-preparation"
+  ],
+  "status": "staged",
+  "expected_remote_root": "/kaggle/working/experiments/public_dataset_la/runs/<timestamped-run-id>/",
+  "expected_local_evidence": "D:\\Bunker\\BaseCamp\\WirelessCommunication\\DDoS_Prevention_and_Mitigation\\experiments\\public_dataset_la\\runs\\lan-classifier-pilot-20261109-v1\\retrieved",
+  "config_overrides": {
+    "name": "lan-classifier-resource-pilot",
+    "conditions": [
+      "lan"
+    ],
+    "train_rows": 20000,
+    "development_rows": 300000,
+    "scope": "resource_pilot",
+    "expected_preparation_sha256": {
+      "lan": "4b3ea123d26edfa93e72cb61127e50af32c3c7a266bc32be3c755e481eec4e60"
+    }
+  }
+}

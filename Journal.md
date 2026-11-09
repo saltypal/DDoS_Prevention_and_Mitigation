@@ -1,5 +1,13 @@
 # Project journal
 
+## DEVELOPMENT SPLIT CORRECTION — LAN pilot evidence, 2026-11-09
+
+LAN classifier pilot v1 stopped in matched-cohort construction before fitting because the earliest chronological third of Star development contained no DDoS. Failure evidence is preserved in experiments/public_dataset_la/runs/lan-classifier-pilot-20261109-v1/retrieved/. Primary topology partitions and Subnets final test remain fixed. Replace ONLY internal development slicing with StratifiedGroupKFold over connected components linking equal selected-feature hashes and session groups, separately per source. This provides disjoint selection/calibration/threshold groups with class-coverage checks, without claiming independent episodes or temporal independence between these internal subsets. No final-test scores were inspected to make this correction. NF primary chronology/embargo boundaries are unaffected; source data preparation jobs continue untouched.
+
+Public source-code execution and private data products remain distinct. LAN private Dataset creation was accepted at https://www.kaggle.com/datasets/satyapaladugu/lan-sdn-nids-prepared and status reports ready; dataset reattachment/layout readback is still pending. Flat Parquet assets and a checksummed directory-layout manifest preserve native data types without creating another full local copy (payload uses hardlinks). Original LAN CC-BY-4.0 attribution retained.
+
+---
+
 ## FULL LAN DATA READY — 2026-11-09
 
 Pinned-source LAN preparation v1 completed at satyapaladugu/sdn-ddos-lan-preparation. All1,125,059rows persisted and verified by local Parquet FOOTER metadata (no local analytical processing);94/94manifest members match. Retained DDoS counts train4196/development999/test1632. Quarantined overlap observations remain in the product with their reason and family, rather than being silently deleted. Saved output319,250,260bytes before the extra native log/retrieval metadata; clean Parquet311,941,276bytes in32files. Verified local copy is under experiments/public_dataset_la/runs/lan-preparation-kaggle-20261109-v1/retrieved/. Available local capacity permitted this~319MBcopy. Six source-stage entries complete. Dataset layout publication remains separately verified, not inferred from notebook completion.

@@ -27,6 +27,9 @@ def resolve_prepared(config):
         expected=config.get('expected_preparation_sha256',{}).get(source)
         if expected and sha256(hits[0])!=expected:
             raise RuntimeError(f'{source}: prepared artifact changed from its pinned input manifest')
+        expected_artifact=config.get('expected_preparation_artifact_sha256',{}).get(source)
+        if expected_artifact and sha256(hits[0].parent.parent/'SHA256_MANIFEST.json')!=expected_artifact:
+            raise RuntimeError(f'{source}: whole prepared output manifest differs from the pinned artifact')
         if manifest['scope'] != 'full':
             raise RuntimeError('Prefix smoke artifacts cannot supply benchmark data')
         manifests[source] = (manifest, hits[0].parent.parent / 'parquet' / source)
@@ -71,24 +74,20 @@ def cohorts(spark, config, run):
         development = pd.concat(dev_parts, ignore_index=True).sort_values(['source', 'time_start', 'row_id']).reset_index(drop=True)
         if train['target'].nunique() != 2:
             raise RuntimeError(f'{condition}: training cohort lacks a class')
-        # Three chronological subsets per source prevent pooled source ordering from defining purposes.
-        sets = {'selection': [], 'calibration': [], 'threshold': []}
-        for _, group in development.groupby('source', sort=True):
-            cut1, cut2 = len(group) // 3, 2 * len(group) // 3
-            for name, frame in zip(sets, [group.iloc[:cut1], group.iloc[cut1:cut2], group.iloc[cut2:]]):
-                if frame['target'].nunique() != 2:
-                    raise RuntimeError(f'{condition}/{name} lacks class coverage; revise development protocol explicitly')
-                sets[name].append(frame)
+        from sdn_ddos.models.combine import development_partitions
+        sets=development_partitions(development,config.get('seed',42))
         path = run.root / 'cohorts' / condition
         path.mkdir(parents=True)
         train.to_parquet(path / 'train.parquet', index=False)
-        for name, pieces in sets.items():
-            pd.concat(pieces, ignore_index=True).to_parquet(path / f'{name}.parquet', index=False)
+        for name, frame in sets.items():
+            frame.to_parquet(path / f'{name}.parquet', index=False)
         shared_contract = dict(contracts[0], training_sources=sources)
         if condition == 'mixture':
             shared_contract['source'] = 'nf_v3_common'
         metadata = {'condition': condition, 'contract': shared_contract, 'train_rows': len(train),
                     'sources': sources, 'equal_requested_budget': budget, 'scope': config.get('scope', 'pilot'),
+                    'development_method':'StratifiedGroupKFold across connected feature/session groups within each protected development source; not independent episodes',
+                    'development_counts':{name:{'rows':len(frame),'ddos':int(frame['target'].sum()),'benign':int(frame['is_benign'].sum())} for name,frame in sets.items()},
                     'hashes': {p.name: sha256(p) for p in path.glob('*.parquet')},
                     'source_manifests': {s: manifests[s][0] for s in sources}}
         write_json(path / 'cohort.json', metadata)

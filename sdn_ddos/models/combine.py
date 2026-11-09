@@ -68,9 +68,8 @@ class FeatureGate:
         return np.sum(self.route(features, top_k) * expert_scores, axis=1)
 
 
-def grouped_folds(table, folds=3):
+def connected_groups(table):
     """Connected components ensure BOTH identical features and flow groups stay together."""
-    from sklearn.model_selection import GroupKFold
     parent = np.arange(len(table))
     def find(index):
         while parent[index] != index:
@@ -85,6 +84,12 @@ def grouped_folds(table, folds=3):
             else:
                 first[value] = index
     groups = np.array([find(i) for i in range(len(table))])
+    return groups
+
+
+def grouped_folds(table, folds=3):
+    from sklearn.model_selection import GroupKFold
+    groups=connected_groups(table)
     if len(np.unique(groups)) < folds:
         raise ValueError('Too few independent connected groups for OOF')
     splits = list(GroupKFold(n_splits=folds).split(table, table['target'], groups))
@@ -92,3 +97,25 @@ def grouped_folds(table, folds=3):
         if table.iloc[train]['target'].nunique() != 2:
             raise ValueError('OOF training fold lacks a class')
     return splits
+
+
+def development_partitions(table, seed=42):
+    """Stratify only WITHIN already protected development sources, never final tests."""
+    from sklearn.model_selection import StratifiedGroupKFold
+    import pandas as pd
+    output={name:[] for name in ('selection','calibration','threshold')}
+    for source,group in table.groupby('source',sort=True):
+        group=group.reset_index(drop=True)
+        components=connected_groups(group)
+        splitter=StratifiedGroupKFold(n_splits=3,shuffle=True,random_state=seed)
+        seen=[]
+        for name,(_,indices) in zip(output,splitter.split(group,group['target'],groups=components)):
+            subset=group.iloc[indices]
+            if subset['target'].nunique()!=2:
+                raise RuntimeError(f'{source}/{name}: connected development groups cannot provide binary coverage; review protocol')
+            used=set(components[indices])
+            if any(used & previous for previous in seen):
+                raise RuntimeError('Development group overlap')
+            seen.append(used)
+            output[name].append(subset)
+    return {name:pd.concat(pieces,ignore_index=True) for name,pieces in output.items()}

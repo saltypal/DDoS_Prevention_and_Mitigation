@@ -2,6 +2,7 @@
 from pathlib import Path
 import json
 import os
+import hashlib
 from sdn_ddos.runtime.run import sha256
 
 
@@ -9,6 +10,10 @@ def materialize_layouts(input_root, cache_root='/kaggle/temp/ddos-prepared-layou
     roots=[]
     for manifest in Path(input_root).rglob('prepared-layout.json'):
         layout=json.loads(manifest.read_text())
+        original={relative:{'bytes':info['bytes'],'sha256':info['sha256']} for relative,info in layout['files'].items()}
+        serialized=json.dumps(original,indent=2,default=str,allow_nan=False)
+        if hashlib.sha256(serialized.encode('utf-8')).hexdigest()!=layout['source_manifest_sha256']:
+            raise RuntimeError('Prepared layout does not reproduce its original artifact manifest')
         destination=Path(cache_root)/sha256(manifest)
         destination.mkdir(parents=True,exist_ok=True)
         for relative, info in layout['files'].items():
@@ -23,5 +28,6 @@ def materialize_layouts(input_root, cache_root='/kaggle/temp/ddos-prepared-layou
             target.parent.mkdir(parents=True,exist_ok=True)
             if not target.exists():
                 os.symlink(source.resolve(),target)
+        (destination/'SHA256_MANIFEST.json').write_text(serialized,encoding='utf-8')
         roots.append(destination)
     return roots

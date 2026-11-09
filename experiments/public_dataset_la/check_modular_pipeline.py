@@ -7,12 +7,25 @@ import pandas as pd
 import nbformat
 import tempfile
 from sdn_ddos.evaluation.alignment import align_scores
-from sdn_ddos.models.combine import FeatureGate, WeightedMean, ProbabilityMean, grouped_folds
+from sdn_ddos.models.combine import FeatureGate, WeightedMean, ProbabilityMean, grouped_folds, development_partitions
 from sdn_ddos.evaluation.metrics import evaluate, choose_threshold
 from sdn_ddos.features.contracts import feature_contract
 
 
 class ContractChecks(unittest.TestCase):
+    def test_development_partitions(self):
+        n=120
+        table=pd.DataFrame({'row_id':[str(i) for i in range(n)],'source':['lan']*n,
+                            'feature_group':[f'g{i//2}' for i in range(n)],'session_group':[f's{i//2}' for i in range(n)],
+                            'target':[(i//2)%2 for i in range(n)]})
+        parts=development_partitions(table)
+        seen=set()
+        for part in parts.values():
+            self.assertEqual(part['target'].nunique(),2)
+            groups=set(part['feature_group'])
+            self.assertFalse(seen & groups)
+            seen.update(groups)
+        self.assertEqual(sum(len(p) for p in parts.values()),n)
     def test_score_identity(self):
         root=Path(__file__).resolve().parent/'runs'/'contract-fixtures'
         root.mkdir(parents=True,exist_ok=True)
