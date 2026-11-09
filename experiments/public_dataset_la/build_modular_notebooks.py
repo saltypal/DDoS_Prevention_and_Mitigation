@@ -85,7 +85,36 @@ def presentation(owner, source, level):
     title = f'{level.upper()} — {owner}: {source}'
     instruction = ('Attach the FULL completed preprocessing outputs. Show original sources, protocol, quarantine and five-plus development plots.'
                    if level == 'la1' else 'Attach the completed classifier and combination outputs. Show all candidates and detailed inference for three leading models; never invent missing runs.')
-    code_source = f"from sdn_ddos.analysis.presentation import show_{level}\nprint('START {level} presentation',flush=True)\nshow_{level}('{source}')\nprint('END {level} presentation',flush=True)"
+    if level=='la1':
+        code_source=f'''from sdn_ddos.analysis.presentation import show_la1
+print('START LA1',flush=True)
+REBUILD=False  # True reruns the same source sanitation/splits/EDA modules on Kaggle.
+artifact_root='/kaggle/input'
+if REBUILD:
+    import json
+    from sdn_ddos.cli import execute
+    config=json.loads((checkout/'experiments/public_dataset_la/configs/prepare.json').read_text())
+    config['sources']=['{source}']
+    config['name']='la1-{owner}-{source}'
+    artifact_root=str(execute(config))
+show_la1('{source}',root=artifact_root)
+print('END LA1',flush=True)
+'''
+    else:
+        code_source=f'''from sdn_ddos.analysis.presentation import show_la2
+print('START LA2',flush=True)
+TRAIN=False  # True runs all12 classifiers; default presents verified executed outputs.
+artifact_root='/kaggle/input'
+if TRAIN:
+    import json
+    from sdn_ddos.cli import execute
+    config=json.loads((checkout/'experiments/public_dataset_la/configs/benchmark.json').read_text())
+    config['conditions']=['{source}']
+    config['name']='la2-{owner}-{source}'
+    artifact_root=str(execute(config))
+show_la2('{source}',root=artifact_root)
+print('END LA2',flush=True)
+'''
     book = nbf.v4.new_notebook(cells=[nbf.v4.new_markdown_cell(f'# {title}\n{instruction}\nSource code and dependencies are revision-pinned by the bootstrap.\nSee experiments/public_dataset_la/DATASET_GUIDE.md for original testbed and modality details.'),cell(bootstrap),
         cell("from IPython.display import display, Markdown\ndisplay(Markdown((checkout/'experiments/public_dataset_la/DATASET_GUIDE.md').read_text()))"),cell(code_source)])
     book.metadata.kernelspec={'name':'python3','language':'python','display_name':'Python 3'}
