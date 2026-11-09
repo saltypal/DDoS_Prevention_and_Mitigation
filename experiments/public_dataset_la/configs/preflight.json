@@ -1,0 +1,5 @@
+{
+  "name": "modular-source-preflight", "stage": "prepare", "sources": ["ton", "bot", "lan"],
+  "smoke_rows_per_file": 5000, "csv_chunk_rows": 5000, "plot_rows": 2000,
+  "shuffle_partitions": 8, "spark_driver_memory": "4g", "scope": "prefix_smoke_only"
+}

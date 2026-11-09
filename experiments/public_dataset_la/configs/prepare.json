@@ -1,0 +1,5 @@
+{
+  "name": "public-data-preparation", "stage": "prepare", "sources": ["ton", "bot", "lan"],
+  "csv_chunk_rows": 100000, "plot_rows": 20000, "embargo_seconds": 60,
+  "shuffle_partitions": 32, "spark_driver_memory": "8g", "scope": "full"
+}

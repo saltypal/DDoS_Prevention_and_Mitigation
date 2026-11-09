@@ -1,0 +1,568 @@
+{
+  "config_schema": "sdn-topology-dataset.design.v1",
+  "config_id": "topology-dataset-v1",
+  "decision_date": "2026-11-07",
+  "timezone": "Asia/Calcutta",
+  "status": "finalized_design_pending_preflight",
+  "execution_status": "not_started",
+  "canonical_project_windows": "D:\\Bunker\\BaseCamp\\WirelessCommunication\\DDoS_Prevention_and_Mitigation",
+  "detailed_plan": "DATASET_PLAN.md",
+  "journal": "Journal.md",
+  "run_map": "KAGGLE_RUNS.md",
+  "topology": {
+    "switch_ids": [
+      "s1",
+      "s2",
+      "s3",
+      "s4",
+      "s5",
+      "s6",
+      "s7"
+    ],
+    "traffic_host_count": 16,
+    "controller_count": 1,
+    "observation_anchors": [
+      "s4",
+      "s5",
+      "s6",
+      "s7"
+    ],
+    "hosts_per_anchor": 4,
+    "hop_definition": "forwarding_switches_including_both_attachment_switches",
+    "families": [
+      {
+        "id": "T1",
+        "name": "star_campus_baseline",
+        "edges": [
+          [
+            "s1",
+            "s2"
+          ],
+          [
+            "s1",
+            "s3"
+          ],
+          [
+            "s1",
+            "s4"
+          ],
+          [
+            "s1",
+            "s5"
+          ],
+          [
+            "s1",
+            "s6"
+          ],
+          [
+            "s1",
+            "s7"
+          ]
+        ],
+        "shortest_anchor_hops": [
+          3
+        ],
+        "inspirations": [
+          "R01",
+          "R04",
+          "R05"
+        ]
+      },
+      {
+        "id": "T2",
+        "name": "balanced_hierarchical_tree",
+        "edges": [
+          [
+            "s1",
+            "s2"
+          ],
+          [
+            "s1",
+            "s3"
+          ],
+          [
+            "s2",
+            "s4"
+          ],
+          [
+            "s2",
+            "s5"
+          ],
+          [
+            "s3",
+            "s6"
+          ],
+          [
+            "s3",
+            "s7"
+          ]
+        ],
+        "shortest_anchor_hops": [
+          3,
+          5
+        ],
+        "inspirations": [
+          "R01",
+          "R05",
+          "R06"
+        ]
+      },
+      {
+        "id": "T3",
+        "name": "ring",
+        "edges": [
+          [
+            "s1",
+            "s2"
+          ],
+          [
+            "s2",
+            "s3"
+          ],
+          [
+            "s3",
+            "s4"
+          ],
+          [
+            "s4",
+            "s5"
+          ],
+          [
+            "s5",
+            "s6"
+          ],
+          [
+            "s6",
+            "s7"
+          ],
+          [
+            "s7",
+            "s1"
+          ]
+        ],
+        "shortest_anchor_hops": [
+          2,
+          3,
+          4
+        ],
+        "inspirations": [
+          "R06"
+        ]
+      },
+      {
+        "id": "T4",
+        "name": "two_spine_fabric",
+        "edges": [
+          [
+            "s1",
+            "s3"
+          ],
+          [
+            "s1",
+            "s4"
+          ],
+          [
+            "s1",
+            "s5"
+          ],
+          [
+            "s1",
+            "s6"
+          ],
+          [
+            "s1",
+            "s7"
+          ],
+          [
+            "s2",
+            "s3"
+          ],
+          [
+            "s2",
+            "s4"
+          ],
+          [
+            "s2",
+            "s5"
+          ],
+          [
+            "s2",
+            "s6"
+          ],
+          [
+            "s2",
+            "s7"
+          ]
+        ],
+        "shortest_anchor_hops": [
+          3
+        ],
+        "inspirations": [
+          "R02",
+          "R03",
+          "R10"
+        ]
+      }
+    ],
+    "fixed_anchor_roles": {
+      "s4": "two_external_clients_and_two_multi_protocol_lab_reflectors",
+      "s5": "four_enterprise_clients_with_HQ_and_branch_like_access_profiles",
+      "s6": "public_web_proxy_public_DNS_protocol_test_target_legitimate_probe",
+      "s7": "two_private_application_servers_internal_DNS_NTP_database"
+    },
+    "forwarding": {
+      "openflow_version": "1.3",
+      "routing": "explicit_loop_free_paths_with_consistent_reverse_paths",
+      "fabric_spine_selection": "stable_flow_hash",
+      "neighbor_resolution": "explicit_bindings_or_controller_handled_resolution_without_cyclic_flooding",
+      "policy": "explicit_zone_and_service_allow_rules",
+      "policy_scope": "research_lab_zone_policy",
+      "change_rule": "same_forwarding_profile_for_benign_and_attack_cases",
+      "record_active_forwarding_footprint": true
+    }
+  },
+  "labels": [
+    "BENIGN",
+    "UDP_FLOOD",
+    "ICMP_FLOOD",
+    "TCP_SYN_FLOOD",
+    "TCP_ACK_FLOOD",
+    "TCP_RST_FLOOD",
+    "HTTP_FLOOD",
+    "SLOW_HTTP",
+    "DNS_AMPLIFICATION",
+    "NTP_AMPLIFICATION",
+    "SSDP_AMPLIFICATION",
+    "UDP_AMPLIFICATION",
+    "MIXED_DDOS"
+  ],
+  "main_experiment": {
+    "workload_seeds": [
+      101,
+      202,
+      303
+    ],
+    "load_bands": [
+      "low",
+      "high"
+    ],
+    "offered_load_factors": {
+      "low": 0.6,
+      "high": 1.2
+    },
+    "volume_load_reference": "total_offered_bits_per_second_over_target_bottleneck",
+    "application_load_reference": "requests_or_connections_over_measured_service_capacity_with_declared_units",
+    "service_capacity_reference": {
+      "reference_topology": "T1",
+      "scope": "one_shared_reference_per_workload_per_resolved_config_revision",
+      "freeze_before_main_capture": true,
+      "per_topology_recalibration": false,
+      "rate_capacity_criterion": "successful_completion_fraction_at_least_0.99_and_achieved_rate_at_least_0.95_of_offered_over_30_seconds",
+      "connection_capacity_criterion": "explicit_configured_concurrent_request_slot_limit_of_the_instrumented_service",
+      "total_load_includes_benign_background": true,
+      "background_fraction_of_reference": 0.2,
+      "scenario_fraction_of_reference": {
+        "low": 0.4,
+        "high": 1.0
+      },
+      "required_reference_fields": [
+        "workload",
+        "reference_topology",
+        "service_configuration_hash",
+        "units",
+        "criterion",
+        "reference_value",
+        "background_allocation",
+        "attempted_rate",
+        "achieved_rate",
+        "resource_state"
+      ]
+    },
+    "baseline_seconds": 30,
+    "scenario_seconds": 60,
+    "recovery_seconds": 30,
+    "observation_interval_seconds": 1,
+    "episode_order": "shuffle_scenario_and_load_order_within_each_topology_seed_block",
+    "reset_boundary": "episode",
+    "resume_boundary": "completed_episode",
+    "planned_episodes": 312
+  },
+  "links": {
+    "requested_bottleneck_mbit_s": 1,
+    "transit_capacity_multiplier": 10,
+    "minimum_other_access_capacity_multiplier": 2,
+    "host_access_delay_ms": 1,
+    "main_inter_switch_one_way_delay_ms": 1,
+    "target_queue_limit_packets": 100,
+    "calibration_rule": "select_one_sustainable_capacity_before_main_capture_and_freeze_in_resolved_run_config",
+    "measurement_rule": "persist_actual_qdisc_rates_delays_drops_and_resource_pressure"
+  },
+  "hop_experiment": {
+    "topology_id": "T3",
+    "source_anchor": "s4",
+    "victim_anchor": "s6",
+    "paths": {
+      "short": [
+        "s4",
+        "s5",
+        "s6"
+      ],
+      "long": [
+        "s4",
+        "s3",
+        "s2",
+        "s1",
+        "s7",
+        "s6"
+      ]
+    },
+    "traffic_conditions": [
+      {
+        "scenario": "LEGITIMATE_FLASH_CROWD",
+        "label": "BENIGN"
+      },
+      {
+        "scenario": "UDP_FLOOD",
+        "label": "UDP_FLOOD"
+      },
+      {
+        "scenario": "TCP_SYN_FLOOD",
+        "label": "TCP_SYN_FLOOD"
+      }
+    ],
+    "workload_seeds": [
+      101,
+      202,
+      303
+    ],
+    "load_band": "high",
+    "propagation_modes": {
+      "natural": {
+        "inter_switch_one_way_delay_ms": 1
+      },
+      "matched": {
+        "total_inter_switch_one_way_delay_ms": 8,
+        "short_edge_delay_ms": 4,
+        "long_edge_delay_ms": 1.6
+      }
+    },
+    "episode_timing": "same_as_main_experiment",
+    "planned_episodes": 36,
+    "paired_group_rule": "same_workload_realization_stays_in_one_evaluation_partition",
+    "condition_order": "shuffle_the_four_path_propagation_cells_within_each_workload_seed_block",
+    "order_rng": "Python_random_Random_seeded_by_SHA256_of_config_id_workload_seed_and_condition",
+    "order_seed_serialization": {
+      "payload": "JSON_array_of_config_id_integer_workload_seed_and_condition_string",
+      "ensure_ascii": true,
+      "separators": [",", ":"],
+      "encoding": "utf-8",
+      "digest": "sha256",
+      "integer_seed": "first_8_digest_bytes_as_unsigned_big_endian_integer"
+    },
+    "initial_cell_order": [
+      {"path": "short", "propagation_mode": "natural"},
+      {"path": "short", "propagation_mode": "matched"},
+      {"path": "long", "propagation_mode": "natural"},
+      {"path": "long", "propagation_mode": "matched"}
+    ],
+    "record_planned_and_actual_order": true,
+    "reset_between_every_cell": true,
+    "claim_scope": "matched_configured_propagation_and_victim_capacity_with_actual_latency_checked"
+  },
+  "totals": {
+    "planned_episodes": 348,
+    "episode_seconds": 120,
+    "scheduled_episode_seconds": 41760,
+    "scheduled_episode_hours": 11.6,
+    "scenario_phase_anchor_window_opportunities": 83520,
+    "all_phase_anchor_window_opportunities": 167040,
+    "count_scope": "opportunities_before_missingness_or_rejection_not_independent_samples_or_measured_results"
+  },
+  "observations": {
+    "primary_unit": "ingress_service_anchor_window",
+    "timestamp_fields": [
+      "window_start_utc",
+      "window_end_utc",
+      "observed_at",
+      "available_at"
+    ],
+    "actual_elapsed_time_required": true,
+    "raw_tables": [
+      "switch_flow_port_telemetry",
+      "controller_events_and_process_resources",
+      "packet_and_flow_prefix_sufficient_statistics",
+      "generator_service_logs",
+      "ground_truth_sidecars"
+    ],
+    "legacy_compatibility_column_count": 29,
+    "legacy_cpu_name": "controller_cpu_proxy_pct",
+    "measured_cpu_name": "controller_cpu_pct",
+    "cpu_convention": "100_percent_equals_one_logical_core_allow_values_above_100_and_record_allocation",
+    "handshake_cohort_horizon_seconds": 10,
+    "missing_measurement_policy": "null_with_reason_and_collector_health",
+    "primary_feature_exclusions": [
+      "topology_id",
+      "route",
+      "hop_count",
+      "workload_seed",
+      "run_id",
+      "window_id",
+      "timestamp_utc",
+      "IP_identity",
+      "MAC_identity",
+      "host_identity",
+      "switch_identity",
+      "attack_intensity",
+      "attacker_count",
+      "background_configuration",
+      "ground_truth_attack_share",
+      "label",
+      "attack_family",
+      "scenario_id",
+      "scenario_name",
+      "attack_mechanism",
+      "stage",
+      "data_source",
+      "schema_version",
+      "experiment_id",
+      "source_revision",
+      "split",
+      "application",
+      "protocol",
+      "src_port",
+      "dst_port",
+      "controller_cpu_proxy_pct",
+      "background_traffic_level",
+      "window_seconds",
+      "observed_at",
+      "available_at"
+    ]
+  },
+  "evaluation": {
+    "split_kind": "whole_campaign_seed_groups_with_topology_holdout",
+    "train_workload_seeds": [
+      101
+    ],
+    "validation_workload_seeds": [
+      202
+    ],
+    "test_workload_seeds": [
+      303
+    ],
+    "topology_folds": "leave_each_of_four_families_out_once",
+    "primary_holdout": "seed_303_of_held_out_family",
+    "same_family_reference": "seed_303_of_training_families",
+    "hop_control_prediction_report": "seed_303_only_for_primary_prediction_claims_other_seeds_for_declared_development_or_physical_measurements",
+    "unused_fold_data": "held_out_family_seeds_101_and_202_are_released_but_excluded_from_that_fold_fit_and_tuning",
+    "balancing": "optional_derived_view_sampled_within_partitions_after_group_assignment",
+    "immediate_sanity_baselines": [
+      "rate_rule",
+      "existing_random_forest"
+    ],
+    "full_model_suite_after_dataset_acceptance": {
+      "Satya": [
+        "Logistic Regression",
+        "Decision Tree",
+        "Random Forest"
+      ],
+      "Prithvi": [
+        "Gaussian Naive Bayes",
+        "Multilayer Perceptron",
+        "RBF Support Vector Machine"
+      ],
+      "Roydon": [
+        "K Nearest Neighbors",
+        "Extra Trees",
+        "Histogram Gradient Boosting"
+      ]
+    }
+  },
+  "runtime": {
+    "pilot_target": "WSL_Linux",
+    "full_capture_target": "Kaggle_CPU",
+    "execution_route_order": [
+      "native_mininet_ovs",
+      "qemu_tcg_linux_guest"
+    ],
+    "controller_targets": {
+      "python": "3.11",
+      "ryu": "4.34",
+      "setuptools": "57.5.0",
+      "eventlet_constraint": "<0.37",
+      "compatibility_shim": "carry_forward_the_inspected_Ryu_Eventlet_launcher"
+    },
+    "mininet_target": "2.3.0",
+    "observed_wsl_ovs_version": "3.7.1",
+    "guest_os_target": "Ubuntu_24.04_LTS",
+    "guest_request": {
+      "vcpus": 2,
+      "memory_gib": 4,
+      "external_workload_network_interface": false
+    },
+    "analytics_targets": {
+      "python": "3.12",
+      "java_major": 17,
+      "pyspark": "4.2.0",
+      "numpy": "1.26.4",
+      "pandas": "2.2.3",
+      "pyarrow": "19.0.1",
+      "scikit_learn": "1.6.1"
+    },
+    "exact_environment_lock": "resolve_and_hash_actual_versions_and_image_during_preflight_before_capture",
+    "capture_parallel_jobs": 1,
+    "collection_wall_budget_hours": 20,
+    "capture_batches": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "hop_intervention"
+    ],
+    "required_preflight_evidence": [
+      "actual_traffic",
+      "telemetry",
+      "actual_paths",
+      "mechanism_checks",
+      "actual_clock_and_resource_behavior",
+      "readable_persisted_artifacts",
+      "representative_retrieval"
+    ],
+    "hosted_capture_verified": false
+  },
+  "artifacts": {
+    "local_experiment_root": "experiments/topology_dataset",
+    "remote_output_root": "/kaggle/working/experiments/topology_dataset/runs",
+    "owner": "satyapaladugu",
+    "capture_notebook_slug": "sdn-ddos-topology-capture",
+    "build_notebook_slug": "sdn-ddos-dataset-build",
+    "notebook_identity_status": "planned_not_created",
+    "notebook_local_sources": {
+      "capture": "experiments/topology_dataset/notebooks/01_kaggle_capture.ipynb",
+      "build": "experiments/topology_dataset/notebooks/02_kaggle_dataset_build.ipynb"
+    },
+    "source_policy": "one_canonical_project_with_hashed_versioned_runtime_bundles",
+    "retained_victim_reference_capture_seconds_per_episode": 10,
+    "header_capture_snaplen_bytes": 160,
+    "reference_capture_phase": "first_10_seconds_of_scenario_phase",
+    "per_episode_atomic_checkpoint": true,
+    "retain_partial_failure_evidence": true,
+    "saved_bundle_budget_gib": 12,
+    "required_run_files": [
+      "resolved_config.json",
+      "environment.json",
+      "provenance.json",
+      "run_manifest.json",
+      "cell_logs",
+      "collector_health",
+      "ground_truth",
+      "quality_report",
+      "SHA256_MANIFEST.json"
+    ]
+  },
+  "future_stages": [
+    "LA1_Plotly_and_LA2_nine_model_delivery",
+    "external_dataset_semantic_compatibility_and_comparison",
+    "Kafka_and_Spark_Structured_Streaming",
+    "bounded_mitigation_and_service_preservation_evaluation"
+  ]
+}

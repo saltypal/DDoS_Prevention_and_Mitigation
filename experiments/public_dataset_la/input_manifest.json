@@ -1,0 +1,406 @@
+{
+  "manifest_version": 1,
+  "generated_utc": "2026-11-07T14:24:04.926345+00:00",
+  "purpose": "Remote public-dataset triage only; no local bulk data. Candidate selection remains open until notebook report.",
+  "kernel_identity": "satyapaladugu/sdn-public-dataset-investigation",
+  "kaggle_cli_observed": "2.2.4",
+  "kaggle_dataset_sources": [
+    {
+      "purpose": "NF-ToN-IoT-v3",
+      "ref": "seyhed/nf-ton-iot-v3",
+      "version_observed": 1,
+      "title": "NF-ToN-IoT-v3",
+      "last_updated_utc": "2026-02-01 05:10:36.337000",
+      "license": "Other (specified in description)",
+      "api_total_bytes": 453905772,
+      "files_listed_bytes_sum": 5302886266,
+      "file_count": 1,
+      "files": [
+        {
+          "name": "NF-ToN-IoT-v3.csv",
+          "bytes": 5302886266,
+          "created_utc": "2026-02-01 05:12:50.293000"
+        }
+      ],
+      "version_pin_note": "kernel-metadata dataset_sources accepts a dataset ref; the observed version is recorded here and must be checked against mounted inputs."
+    },
+    {
+      "purpose": "NF-BoT-IoT-v3",
+      "ref": "seyhed/nf-bot-iot-v3",
+      "version_observed": 1,
+      "title": "NF-BoT-IoT-v3",
+      "last_updated_utc": "2026-02-01 04:12:09.917000",
+      "license": "Other (specified in description)",
+      "api_total_bytes": 78813598,
+      "files_listed_bytes_sum": 3817527532,
+      "file_count": 1,
+      "files": [
+        {
+          "name": "NF-BoT-IoT-v3.csv",
+          "bytes": 3817527532,
+          "created_utc": "2026-02-01 04:13:33.988000"
+        }
+      ],
+      "version_pin_note": "kernel-metadata dataset_sources accepts a dataset ref; the observed version is recorded here and must be checked against mounted inputs."
+    },
+    {
+      "purpose": "BCCC-cPacket-Cloud-DDoS-2024",
+      "ref": "bcccdatasets/bccc-cpacket-cloud-ddos-2024",
+      "version_observed": 1,
+      "title": "Cloud-base DDoS Attack Classification using ML/DL",
+      "last_updated_utc": "2024-05-23 17:28:49.917000",
+      "license": "MIT (Kaggle dataset metadata)",
+      "api_total_bytes": 136602596,
+      "files_listed_bytes_sum": 1206804773,
+      "file_count": 1,
+      "files": [
+        {
+          "name": "merged_CSVs.csv",
+          "bytes": 1206804773,
+          "created_utc": "2024-05-23 17:29:25.333000"
+        }
+      ],
+      "version_pin_note": "kernel-metadata dataset_sources accepts a dataset ref; the observed version is recorded here and must be checked against mounted inputs."
+    },
+    {
+      "purpose": "IoT-23",
+      "ref": "dhoogla/iot23-dataset",
+      "version_observed": 3,
+      "title": "IoT-23",
+      "last_updated_utc": "2026-10-20 13:33:17.993000",
+      "license": "CC BY-NC-SA 4.0 (Kaggle mirror metadata); page says upstream README license is CC BY 2.0; verify mirror redistribution terms before reuse",
+      "api_total_bytes": 8846549281,
+      "files_listed_bytes_sum": 9528855055,
+      "file_count": 47,
+      "files": [
+        {
+          "name": "CTU-Honeypot-Capture-4-1.features.parquet",
+          "bytes": 11429,
+          "created_utc": "2026-10-20 13:33:36.141000"
+        },
+        {
+          "name": "CTU-Honeypot-Capture-4-1.metadata.parquet",
+          "bytes": 15725,
+          "created_utc": "2026-10-20 13:33:34.567000"
+        },
+        {
+          "name": "CTU-Honeypot-Capture-5-1.features.parquet",
+          "bytes": 27127,
+          "created_utc": "2026-10-20 13:33:33.997000"
+        },
+        {
+          "name": "CTU-Honeypot-Capture-5-1.metadata.parquet",
+          "bytes": 42959,
+          "created_utc": "2026-10-20 13:33:36.253000"
+        },
+        {
+          "name": "CTU-Honeypot-Capture-7-1.features.parquet",
+          "bytes": 7138,
+          "created_utc": "2026-10-20 13:33:36.138000"
+        },
+        {
+          "name": "CTU-Honeypot-Capture-7-1.metadata.parquet",
+          "bytes": 6153,
+          "created_utc": "2026-10-20 13:33:34.714000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-1-1.features.parquet",
+          "bytes": 4311496,
+          "created_utc": "2026-10-20 13:33:34.796000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-1-1.metadata.parquet",
+          "bytes": 31746169,
+          "created_utc": "2026-10-20 13:33:42.828000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-17-1.features.parquet",
+          "bytes": 139461036,
+          "created_utc": "2026-10-20 13:33:50.719000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-17-1.metadata.parquet",
+          "bytes": 1439263956,
+          "created_utc": "2026-10-20 13:35:38.747000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-20-1.features.parquet",
+          "bytes": 33409,
+          "created_utc": "2026-10-20 13:33:36.137000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-20-1.metadata.parquet",
+          "bytes": 90354,
+          "created_utc": "2026-10-20 13:33:36.142000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-21-1.features.parquet",
+          "bytes": 32300,
+          "created_utc": "2026-10-20 13:33:36.145000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-21-1.metadata.parquet",
+          "bytes": 97797,
+          "created_utc": "2026-10-20 13:33:36.163000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-3-1.features.parquet",
+          "bytes": 960570,
+          "created_utc": "2026-10-20 13:33:36.159000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-3-1.metadata.parquet",
+          "bytes": 4667944,
+          "created_utc": "2026-10-20 13:33:37.698000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-33-1.features.parquet",
+          "bytes": 121337668,
+          "created_utc": "2026-10-20 13:33:49.166000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-33-1.metadata.parquet",
+          "bytes": 1425894829,
+          "created_utc": "2026-10-20 13:35:58.947000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-34-1.features.parquet",
+          "bytes": 156531,
+          "created_utc": "2026-10-20 13:33:37.525000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-34-1.metadata.parquet",
+          "bytes": 620480,
+          "created_utc": "2026-10-20 13:33:34.229000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-35-1.features.parquet",
+          "bytes": 52569847,
+          "created_utc": "2026-10-20 13:33:44.253000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-35-1.metadata.parquet",
+          "bytes": 262065067,
+          "created_utc": "2026-10-20 13:34:01.097000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-36-1.features.parquet",
+          "bytes": 28913062,
+          "created_utc": "2026-10-20 13:33:40.078000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-36-1.metadata.parquet",
+          "bytes": 360561101,
+          "created_utc": "2026-10-20 13:34:08.892000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-39-1.features.parquet",
+          "bytes": 163779266,
+          "created_utc": "2026-10-20 13:33:52.284000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-39-1.metadata.parquet",
+          "bytes": 2130832709,
+          "created_utc": "2026-10-20 13:37:06.695000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-42-1.features.parquet",
+          "bytes": 56856,
+          "created_utc": "2026-10-20 13:33:34.743000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-42-1.metadata.parquet",
+          "bytes": 134082,
+          "created_utc": "2026-10-20 13:33:36.519000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-43-1.features.parquet",
+          "bytes": 152251974,
+          "created_utc": "2026-10-20 13:33:51.471000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-43-1.metadata.parquet",
+          "bytes": 1747258299,
+          "created_utc": "2026-10-20 13:36:26.783000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-44-1.features.parquet",
+          "bytes": 7725,
+          "created_utc": "2026-10-20 13:33:36.518000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-44-1.metadata.parquet",
+          "bytes": 8394,
+          "created_utc": "2026-10-20 13:33:34.020000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-48-1.features.parquet",
+          "bytes": 14274709,
+          "created_utc": "2026-10-20 13:33:38.324000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-48-1.metadata.parquet",
+          "bytes": 88753918,
+          "created_utc": "2026-10-20 13:33:46.996000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-49-1.features.parquet",
+          "bytes": 18833131,
+          "created_utc": "2026-10-20 13:33:40.630000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-49-1.metadata.parquet",
+          "bytes": 141929761,
+          "created_utc": "2026-10-20 13:33:51.320000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-52-1.features.parquet",
+          "bytes": 50595834,
+          "created_utc": "2026-10-20 13:33:43.710000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-52-1.metadata.parquet",
+          "bytes": 527575269,
+          "created_utc": "2026-10-20 13:34:33.342000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-60-1.features.parquet",
+          "bytes": 7522187,
+          "created_utc": "2026-10-20 13:33:38.273000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-60-1.metadata.parquet",
+          "bytes": 82171647,
+          "created_utc": "2026-10-20 13:33:46.387000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-7-1.features.parquet",
+          "bytes": 25604728,
+          "created_utc": "2026-10-20 13:33:40.496000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-7-1.metadata.parquet",
+          "bytes": 304989343,
+          "created_utc": "2026-10-20 13:34:02.615000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-8-1.features.parquet",
+          "bytes": 76619,
+          "created_utc": "2026-10-20 13:33:28.011000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-8-1.metadata.parquet",
+          "bytes": 306194,
+          "created_utc": "2026-10-20 13:33:34.479000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-9-1.features.parquet",
+          "bytes": 15282731,
+          "created_utc": "2026-10-20 13:33:38.802000"
+        },
+        {
+          "name": "CTU-IoT-Malware-Capture-9-1.metadata.parquet",
+          "bytes": 183601419,
+          "created_utc": "2026-10-20 13:33:54.684000"
+        },
+        {
+          "name": "scenario-summary.parquet",
+          "bytes": 114113,
+          "created_utc": "2026-10-20 13:33:37.615000"
+        }
+      ],
+      "version_pin_note": "kernel-metadata dataset_sources accepts a dataset ref; the observed version is recorded here and must be checked against mounted inputs."
+    }
+  ],
+  "iot23_schema_contract": {
+    "source": "https://www.kaggle.com/datasets/dhoogla/iot23-dataset",
+    "version_observed": 3,
+    "files": "23 aligned scenario pairs: <scenario>.features.parquet and <scenario>.metadata.parquet, plus scenario-summary.parquet",
+    "row_count_claimed_by_dataset_description": 325309946,
+    "features_table": "14 predictors plus label, detailed-label and one-based source_row",
+    "metadata_table": "timestamp text, UID, IPs, ports, tunnel parents, plus one-based source_row",
+    "join": "No label join is needed: labels are already in each features table. If metadata is needed, join on same scenario basename and source_row; check key uniqueness/cardinality before joining.",
+    "exclude_from_predictors": [
+      "source_row",
+      "label",
+      "detailed-label",
+      "timestamp",
+      "UID",
+      "IP addresses",
+      "ports",
+      "tunnel parents"
+    ],
+    "upstream_readme_license": "CC BY 2.0 per Kaggle description; attribution required",
+    "caveats": [
+      "Kaggle mirror metadata states CC BY-NC-SA 4.0; resolve license/provenance before redistribution.",
+      "Scenario membership does not mean every flow is malicious.",
+      "Prefer scenario or temporal evaluation splits to avoid leakage."
+    ],
+    "binary_label_counts_as_reported": {
+      "Benign": 30860691,
+      "Malicious": 294449255
+    },
+    "detailed_label_ddos_count_as_reported": 19538713,
+    "cleaning_notebook": "https://www.kaggle.com/code/dhoogla/iot-23-00-cleaning"
+  },
+  "official_remote_dataverse": {
+    "doi": "10.21950/QMAXKP",
+    "persistent_id": "doi:10.21950/QMAXKP",
+    "api_url": "https://edatos.consorciomadrono.es/api/datasets/:persistentId/?persistentId=doi:10.21950/QMAXKP",
+    "version": "3.0 (parent-verified)",
+    "license": "CC BY 4.0",
+    "files": [
+      {
+        "name": "linear.csv",
+        "file_id": "55750",
+        "approx_size_mb": 89
+      },
+      {
+        "name": "mesh.csv",
+        "file_id": "55751",
+        "approx_size_mb": 87
+      },
+      {
+        "name": "star.csv",
+        "file_id": "55752",
+        "approx_size_mb": 74
+      },
+      {
+        "name": "subnets.csv",
+        "file_id": "55753",
+        "approx_size_mb": 86
+      },
+      {
+        "name": "tree.csv",
+        "file_id": "55754",
+        "approx_size_mb": 87
+      },
+      {
+        "name": "FULL_SDN_NIDS.parquet",
+        "file_id": "55755",
+        "approx_size_mb": 83,
+        "note": "Aggregate duplicate; do not attach when using component CSVs."
+      },
+      {
+        "name": "data_dictionary.csv",
+        "file_id": "63541",
+        "approx_size_mb": null
+      },
+      {
+        "name": "readme_en.txt",
+        "file_id": "63552",
+        "approx_size_mb": null
+      }
+    ],
+    "acquisition": "Download selected files remotely in Kaggle runtime using /api/access/datafile/{file_id}; no local source download.",
+    "provenance_note": "Metadata and file IDs were verified by the main thread; not independently re-fetched in this preflight."
+  },
+  "size_accounting": "Kaggle API file sizes and dataset totalBytes disagree for every inspected attachment. Use observed file listing sizes, log mounted inventory, and check runtime disk before processing.",
+  "storage_policy": "Large candidate files remain Kaggle inputs or remote-runtime cache. Retrieve only compact reports, logs, and executed notebook outputs.",
+  "not_performed": [
+    "payload download",
+    "schema parsing of source files",
+    "Kaggle submission",
+    "kernel execution"
+  ]
+}

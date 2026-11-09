@@ -1,0 +1,15 @@
+{
+  "id": "satyapaladugu/sdn-public-dataset-investigation",
+  "title": "SDN Public Dataset Investigation",
+  "code_file": "01_public_dataset_investigation.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_internet": true,
+  "dataset_sources": [
+    "bcccdatasets/bccc-cpacket-cloud-ddos-2024"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

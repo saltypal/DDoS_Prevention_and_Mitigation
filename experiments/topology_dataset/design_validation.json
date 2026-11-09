@@ -1,0 +1,147 @@
+{
+  "validated_date": "2026-11-07",
+  "scope": "static_design_config_graph_matrix_reference_and_document_contract_checks",
+  "status": "passed",
+  "runtime_checks_performed": false,
+  "dataset_generation_performed": false,
+  "config_sha256": "2de45877854a4b1f80324da0d2168725500b971fefd585acde1e6c94cca7fb66",
+  "checks_passed": 35,
+  "checks": [
+    "four_topologies_and_thirteen_distinct_labels",
+    "sixteen_hosts_on_four_fixed_anchors",
+    "T1_connected",
+    "T1_declared_hops",
+    "T2_connected",
+    "T2_declared_hops",
+    "T3_connected",
+    "T3_declared_hops",
+    "T4_connected",
+    "T4_declared_hops",
+    "hop_short_simple_valid_path",
+    "hop_short_matched_propagation",
+    "hop_long_simple_valid_path",
+    "hop_long_matched_propagation",
+    "episode_counts_and_scheduled_time",
+    "scenario_and_all_phase_opportunities",
+    "disjoint_seed_partitions",
+    "shared_T1_capacity_reference_and_load_allocation",
+    "reproducible_hop_order_and_reset",
+    "fourteen_reference_entries_and_resolved_inspiration_ids",
+    "all_twenty_nine_legacy_columns_documented",
+    "nine_models_match_existing_team_contract",
+    "Journal.md_local_link_DATASET_PLAN.md",
+    "Journal.md_local_link_experiments/topology_dataset/configs/dataset_v1.json",
+    "Journal.md_local_link_KAGGLE_RUNS.md",
+    "Journal.md_local_link_../DDoS_Prevention/README.md",
+    "Journal.md_local_link_../DDoS_Prevention/analytics/README.md",
+    "DATASET_PLAN.md_local_link_experiments/topology_dataset/configs/dataset_v1.json",
+    "DATASET_PLAN.md_local_link_Journal.md",
+    "DATASET_PLAN.md_local_link_KAGGLE_RUNS.md",
+    "KAGGLE_RUNS.md_local_link_Journal.md",
+    "KAGGLE_RUNS.md_local_link_DATASET_PLAN.md",
+    "KAGGLE_RUNS.md_local_link_experiments/topology_dataset/configs/dataset_v1.json",
+    "runtime_and_notebook_creation_are_pending",
+    "exact_shuffle_serialization_and_initial_cell_order_reproducible_in_nine_blocks"
+  ],
+  "graphs": {
+    "T1": {
+      "switches": 7,
+      "links": 6,
+      "anchor_hops": [
+        3
+      ]
+    },
+    "T2": {
+      "switches": 7,
+      "links": 6,
+      "anchor_hops": [
+        3,
+        5
+      ]
+    },
+    "T3": {
+      "switches": 7,
+      "links": 7,
+      "anchor_hops": [
+        2,
+        3,
+        4
+      ]
+    },
+    "T4": {
+      "switches": 7,
+      "links": 10,
+      "anchor_hops": [
+        3
+      ]
+    }
+  },
+  "episodes": {
+    "main": 312,
+    "intervention": 36,
+    "total": 348
+  },
+  "scheduled_hours": 11.6,
+  "window_opportunities": {
+    "scenario": 83520,
+    "all_phases": 167040
+  },
+  "verified_local_links": [
+    {
+      "document": "Journal.md",
+      "target": "DATASET_PLAN.md"
+    },
+    {
+      "document": "Journal.md",
+      "target": "experiments/topology_dataset/configs/dataset_v1.json"
+    },
+    {
+      "document": "Journal.md",
+      "target": "KAGGLE_RUNS.md"
+    },
+    {
+      "document": "Journal.md",
+      "target": "../DDoS_Prevention/README.md"
+    },
+    {
+      "document": "Journal.md",
+      "target": "../DDoS_Prevention/analytics/README.md"
+    },
+    {
+      "document": "DATASET_PLAN.md",
+      "target": "experiments/topology_dataset/configs/dataset_v1.json"
+    },
+    {
+      "document": "DATASET_PLAN.md",
+      "target": "Journal.md"
+    },
+    {
+      "document": "DATASET_PLAN.md",
+      "target": "KAGGLE_RUNS.md"
+    },
+    {
+      "document": "KAGGLE_RUNS.md",
+      "target": "Journal.md"
+    },
+    {
+      "document": "KAGGLE_RUNS.md",
+      "target": "DATASET_PLAN.md"
+    },
+    {
+      "document": "KAGGLE_RUNS.md",
+      "target": "experiments/topology_dataset/configs/dataset_v1.json"
+    }
+  ],
+  "remaining_runtime_gates": [
+    "environment_lock",
+    "Kaggle_capture_capability",
+    "attack_mechanisms",
+    "feature_and_label_reconciliation",
+    "durable_output_retrieval"
+  ],
+  "reproducible_order_blocks_checked": 9,
+  "review_findings": {
+    "shared_capacity_reference": "accepted_and_closed",
+    "intervention_condition_order": "accepted_and_closed"
+  }
+}
